@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/29 01:32:21 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/01/29 17:58:59 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@
 
 #include "fillit.h"
 
-int *check_parse(int fd, t_block *tetri, int *order)
+int check_map(int fd, t_block *tetri, int *order)
 {
 	int i = 0;
+	int j = 0;
+	int k = 0;
 	int ret;
 	ret = read(fd, tetri, BUFF_SIZE);
 	printf("ret = %d\n",ret);
@@ -34,9 +36,33 @@ int *check_parse(int fd, t_block *tetri, int *order)
 		write(1, "error nb\n", 9);
 		return (NULL);
 	}
+	while (i < ((ret / 21) + 1))
+	{
+		while (j < 4)
+		{
+			while (k < 4)
+			{
+				if (tetri[i].block[j][k] != '.' && tetri[i].block[j][k] != '#')
+				{
+					write(1, "error content\n", 14);
+					return (NULL);
+				}
+				k++;
+			}
+			k = 0;
+			if (tetri[i].block[j++][4] != '\n')
+			{
+				write(1, "error EOL\n", 10);
+				return (NULL);
+			}
+		}
+		j = 0;
+		i++;
+	}
+	i = 0;
 	while (i < (ret / 21))
 	{
-		printf("sep = %c\n", tetri[i].sep);
+		printf("sep = %c", tetri[i].sep);
 		if (tetri[i++].sep != '\n')
 		{
 			write(1, "error sep\n", 10);
