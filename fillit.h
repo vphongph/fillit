@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/24 23:28:08 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/01/29 01:22:14 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define FILLIT_H
 # define RED		"\e[38;2;255;0;0m"
 # define RESET		"\e[0m"
-# define BUFF_SIZE	21
+# define BUFF_SIZE	21 * 26 - 1
 # define O_0	10
 # define I_0	20
 # define I_90	21
@@ -49,11 +49,10 @@
 # define S_90	71
 # include "libft/libft.h"
 
-typedef struct	s_tetridata{
+typedef struct	s_block{
 
-	int		type;
-	int		number;
-	int		*order;
-}				t_tetridata;
+	char	block[4][5];
+	char	sep;
+}				t_block;
 
 #endif
