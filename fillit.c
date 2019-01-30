@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/29 17:58:59 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/01/30 05:58:12 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,49 @@
 
 #include "fillit.h"
 
-int check_map(int fd, t_block *tetri, int *order)
+int	check_block(t_block *tetri)
 {
-	int i = 0;
+	int neighbor = 0;
+	int	nb = 0;
 	int j = 0;
 	int k = 0;
+	int xy[16][16];
+	ft_bzero_v2(xy, sizeof(xy));
+
+	while (j < 4 && tetri->block[j][4] == '\n')
+	{
+		while (k < 4 && (tetri->block[j][k] == '.'
+			|| tetri->block[j][k] == '#'))
+		{
+			if (tetri->block[j][k] == '#' && ++nb)
+			{
+				xy[0][0] = xy[j][k];
+
+				if (k != 3 && tetri->block[j][k + 1] == '#')
+					neighbor++;
+				if (k != 0 && tetri->block[j][k - 1] == '#')
+					neighbor++;
+				if (j != 3 && tetri->block[j + 1][k] == '#')
+					neighbor++;
+				if (j != 0 && tetri->block[j - 1][k] == '#')
+					neighbor++;
+			}
+			k++;
+		}
+		k = 0;
+		j++;
+	}
+	printf("neighbor = %d\n", neighbor);
+	if ((neighbor != 6 && neighbor != 8) || nb != 4)
+		return (0);
+	return (1);
+}
+
+int *check_map(int fd, t_block *tetri, int *order)
+{
+	int i = 0;
 	int ret;
 	ret = read(fd, tetri, BUFF_SIZE);
-	printf("ret = %d\n",ret);
 
 	printf("%s",tetri[0].block[0]);
 	fflush(stdout);
@@ -38,38 +73,18 @@ int check_map(int fd, t_block *tetri, int *order)
 	}
 	while (i < ((ret / 21) + 1))
 	{
-		while (j < 4)
-		{
-			while (k < 4)
-			{
-				if (tetri[i].block[j][k] != '.' && tetri[i].block[j][k] != '#')
-				{
-					write(1, "error content\n", 14);
-					return (NULL);
-				}
-				k++;
-			}
-			k = 0;
-			if (tetri[i].block[j++][4] != '\n')
-			{
-				write(1, "error EOL\n", 10);
-				return (NULL);
-			}
-		}
-		j = 0;
-		i++;
-	}
-	i = 0;
-	while (i < (ret / 21))
-	{
-		printf("sep = %c", tetri[i].sep);
-		if (tetri[i++].sep != '\n')
+		if (i < (ret / 21) && tetri[i].sep != '\n')
 		{
 			write(1, "error sep\n", 10);
 			return (NULL);
 		}
+		if (!check_block(&tetri[i]))
+		{
+			write(1, "error content\n", 14);
+			return (NULL);
+		}
+		i++;
 	}
-
 	return (order);
 }
 
@@ -94,7 +109,7 @@ int		main(int ac, char **av)
 			return (-1);
 		}
 
-		check_parse(3, tetri, order);
+		check_map(3, tetri, order);
 		// while (i < 26)
 		// {
 		// 	while (j < 4)
