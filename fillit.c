@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/30 14:31:45 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/01/30 22:00:14 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 
 #include "fillit.h"
 
+int recognize(reco)
+{
+
+}
+
 int	check_block(t_block *tetri)
 {
 	int neighbor = 0;
@@ -26,32 +31,36 @@ int	check_block(t_block *tetri)
 	int j = 0;
 	int k = 0;
 
-	while (j < 4 && tetri->block[j][4] == '\n')
+	while (j < 4)
 	{
-		while (k < 4 && (tetri->block[j][k] == '.'
-			|| tetri->block[j][k] == '#'))
+		if (tetri->block[j][4] != '\n')
+			return (0);
+		while (k < 4)
 		{
+			if (tetri->block[j][k] != '.' && tetri->block[j][k] != '#')
+				return (0);
 			if (tetri->block[j][k] == '#' && ++nb)
 			{
-
-				if (k != 3 && tetri->block[j][k + 1] == '#')
-					neighbor++;
 				if (k != 0 && tetri->block[j][k - 1] == '#')
+				{
 					neighbor++;
-				if (j != 3 && tetri->block[j + 1][k] == '#')
-					neighbor++;
+					reco += 'W';
+				}
 				if (j != 0 && tetri->block[j - 1][k] == '#')
+				{
 					neighbor++;
+					reco += 'N';
+
+				}
 			}
 			k++;
 		}
 		k = 0;
 		j++;
 	}
-	printf("neighbor = %d\n", neighbor);
-	if ((neighbor != 6 && neighbor != 8) || nb != 4)
+	if ((neighbor != 3 && neighbor != 4) || nb != 4)
 		return (0);
-	return (1);
+	return (recognize());
 }
 
 int *check_map(int fd, t_block *tetri, int *order)
