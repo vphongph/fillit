@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/30 05:58:12 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/01/30 14:31:45 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	check_block(t_block *tetri)
 	int	nb = 0;
 	int j = 0;
 	int k = 0;
-	int xy[16][16];
-	ft_bzero_v2(xy, sizeof(xy));
 
 	while (j < 4 && tetri->block[j][4] == '\n')
 	{
@@ -35,7 +33,6 @@ int	check_block(t_block *tetri)
 		{
 			if (tetri->block[j][k] == '#' && ++nb)
 			{
-				xy[0][0] = xy[j][k];
 
 				if (k != 3 && tetri->block[j][k + 1] == '#')
 					neighbor++;
