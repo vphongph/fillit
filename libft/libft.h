@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 13:26:35 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/19 05:35:22 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/01/31 16:38:46 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,13 @@ typedef	struct	s_dlist
 typedef struct	s_512speed
 {
 	char		ram[512];
+	char		init[0];
 }				t_512speed;
 
 typedef struct	s_64speed
 {
 	char		ram[64];
+	char		init[0];
 }				t_64speed;
 
 void			*ft_memalloc(size_t size);

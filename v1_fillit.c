@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fillit.c                                           :+:      :+:    :+:   */
+/*   v1_fillit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/02 07:06:21 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/02 06:43:48 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,40 @@
 // printf("column literal AND: %#.016llx\n",*(uint64_t *)".xxxx.xx" & 0x0000ff00000000ff);
 // printf("column block   AND: %#.016llx\n",*(uint64_t *)tetri->block[0] & 0x0000ff00000000ff);
 
-// if ((char)0x3132 == 0x31)
-// 	endian = 0xff00000000ff0000;
-// else
-// 	endian = 0xff00000000ff;
-
 void cut_block(t_block *tetri)
 {
-	while (*(int *)tetri->block[0] == *(int *)"....")
+	uint64_t endian = 0;
+
+	if ((char)0x3132 == 0x31)
+		endian = 0xff00000000ff0000;
+	else
+		endian = 0xff00000000ff;
+
+	int j = 0;
+
+	while (j < 4)
 	{
-		*(int *)tetri->block[0] = *(int *)tetri->block[1];
-		*(int *)tetri->block[1] = *(int *)tetri->block[2];
-		*(int *)tetri->block[2] = *(int *)tetri->block[3];
-		*(int *)tetri->block[3] = *(int *)"....";
+		if (j > 0 && *(int *)tetri->block[j] != *(int *)"...."
+			&& *(int *)tetri->block[j - 1] == *(int *)"....")
+		{
+			*(int *)tetri->block[j - 1] = *(int *)tetri->block[j];
+			*(int *)tetri->block[j] = 0x2e2e2e2e;
+			j = 0;
+		}
+			// if ((*(uint64_t *)tetri->block[0] & endian)
+			// 	== (*(uint64_t *)".xxxx.xx" & endian)
+			// 		&& (*(uint64_t *)tetri->block[2] & endian)
+			// 			== (*(uint64_t *)".xxxx.xx" & endian))
+			// {
+			// 	*(int *)tetri->block[0] = *(int *)tetri->block[0] >> 8;
+			// 	*(int *)tetri->block[1] = *(int *)tetri->block[1] >> 8;
+			// 	*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8;
+			// 	*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
+			// }
+		j++;
 	}
-	while ((*(uint64_t *)tetri->block[0] & 0xff00000000ff)
-		== (*(uint64_t *)".xxxx.xx" & 0xff00000000ff)
-			&& (*(uint64_t *)tetri->block[2] & 0xff00000000ff)
-				== (*(uint64_t *)".xxxx.xx" & 0xff00000000ff))
-	{
-		*(int *)tetri->block[0] = *(int *)tetri->block[0] >> 8;
-		*(int *)tetri->block[1] = *(int *)tetri->block[1] >> 8;
-		*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8;
-		*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
-	}
+	// j = 3;
+	// k = 0xff;
 
 	// printf("%#08x\n", j & k);
 

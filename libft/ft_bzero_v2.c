@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 18:34:10 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/30 04:13:13 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/01 23:11:08 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 static void	ft_zero512(void **s, size_t *n, int *i)
 {
-	static t_64speed	speed64;
-	static t_512speed	speed512;
+	const t_64speed		speed64 = {.init = {}};
+	const t_512speed	speed512 = {.init = {}};
 
 	while (*n >> 9)
 	{
@@ -46,20 +46,8 @@ void		ft_bzero_v2(void *s, size_t n)
 		return ;
 	}
 	ft_zero512(&s, &n, &i);
-	while (n >> 3)
-	{
-		*(long long *)s = 0;
-		s += 8;
-		n -= 8;
-		i += 8;
-	}
-	while (n)
-	{
-		*(char *)s = 0;
-		s++;
-		n--;
-		i++;
-	}
+	(void)ft_zero512;
+
 	printf("address bzero pointer = %p\n", s);
 	printf("i bzero = %d\n", i);
 }
