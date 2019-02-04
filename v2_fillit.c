@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fillit.c                                           :+:      :+:    :+:   */
+/*   v2_fillit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/04 06:25:18 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/04 06:08:39 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,6 @@
 
 #define DETECTSHARP(X) (~(X - 0x24242424))
 #define DETECTNULL(X) ((X - 0x01010101) & ~X & 0x80808080)
-
-int		detectchar(char *s, char c, int byte)
-{
-	uint16_t i;
-	uint32_t j;
-	uint64_t k;
-
-	if (byte == 2)
-		i = *(uint16_t *)s;
-	if (byte == 4)
-	if (byte == 8)
-}
 
 void	cut_block_short(t_block *tetri)
 {
