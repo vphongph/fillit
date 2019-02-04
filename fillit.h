@@ -24,6 +24,11 @@
 */
 
 #ifndef FILLIT_H
+
+# include <stdlib.h>
+# include <unistd.h>
+# include "libft/libft.h"
+
 # define FILLIT_H
 # define RED		"\e[38;2;255;0;0m"
 # define RESET		"\e[0m"
@@ -47,13 +52,56 @@
 # define Z_90	61
 # define S_0	70
 # define S_90	71
-# include "libft/libft.h"
+# define NB_DIFFERENT_TETROS 19
+
+enum 	e_tetro
+{
+	t_o_0,
+	t_i_0,
+	t_i_90,
+	t_t_0,
+	t_t_90,
+	t_t_180,
+	t_t_270,
+	t_l_0,
+	t_l_90,
+	t_l_180,
+	t_l_270,
+	t_j_0,
+	t_j_90,
+	t_j_180,
+	t_j_270,
+	t_z_0,
+	t_z_90,
+	t_s_0,
+	t_s_90
+};
+
+typedef struct	s_coords
+{
+	int			x;
+	int			y;
+}				t_coords;
+
+typedef struct	s_map
+{
+	char 		*map;
+	int			size;
+}				t_map;
+
+typedef struct 	s_env
+{
+	char		**tetros;
+	int			tetros_count;
+}				t_env;
 
 typedef struct	s_tetridata{
-
 	int		type;
 	int		number;
 	int		*order;
 }				t_tetridata;
 
+void		ft_putendl(char *str);
+int			ft_strlen(char *str);
+int			ft_floor_sqrt(int x);
 #endif
