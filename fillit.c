@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/04 06:25:18 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/05 17:07:29 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,21 @@
 /*
 ** cut_block NEIGHBOR SHORT version
 */
-
 #define DETECTSHARP(X) (~(X - 0x24242424))
 #define DETECTNULL(X) ((X - 0x01010101) & ~X & 0x80808080)
+// #define DETECTSHARP(X) DETECTNULL(~(X - 0x24242424))
 
-int		detectchar(char *s, char c, int byte)
+int		detectnull(int c)
 {
-	uint16_t i;
-	uint32_t j;
-	uint64_t k;
+	c = (c - 0x01010101) & ~c;
+	c = c & 0x80808080;
+	return (c);
+}
 
-	if (byte == 2)
-		i = *(uint16_t *)s;
-	if (byte == 4)
-	if (byte == 8)
+int		detectsharp(int c)
+{
+	c = ~(c - 0x24242424) & ~c;
+	return ((c - 0x01010101) & ~c & 0x80808080);
 }
 
 void	cut_block_short(t_block *tetri)
@@ -86,11 +87,12 @@ void	cut_block_short(t_block *tetri)
 			if ((*(int *)tetri->block[1] = *(int *)tetri->block[1] >> 8))
 				if ((*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8))
 					*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
-
-	while (++k < 19)
+	k = 0;
+	while (k < 16)
 	{
-		if (k < 14 && tetri->block[0][k] == '#' && ++nb == 4)
-			*(uint32_t *)&tetri->block[0][k + 5] = *(uint32_t *)"----";
+		if (!(detectsharp(*(uint32_t *)&tetri->block[0][k])))
+			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
+		k += 5;
 	}
 }
 
@@ -196,7 +198,11 @@ int		main(int ac, char **av)
 		// 	i++;
 		// }
 
-		printf("i: %c, sharp:%#.02x\n", 35, DETECTNULL(DETECTSHARP(35)));
+		unsigned int z = 0x23230000;
+		// printf("\nz : -%c- , sharp : %#.08x\n", z, DETECTSHARP(0x23232323));
+		printf("\nz : -%c- , sharp : %#.08x\n", z, detectsharp(0x00760076));
+		// printf("z : -%c- , sharp : %#.08x\n", z, DETECTNULL(DETECTSHARP(*(int *)"\0\0#\0")));
+		printf("z : -%c- , sharp : %#.08x\n", z, detectnull(0x42002323));
 
 		if (close(3) == -1)
 		{
