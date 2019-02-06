@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/06 04:05:32 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/06 04:23:57 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	cut_block_short(t_block *tetri)
 			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
 			// *(uint32_t *)&tetri->block[0][k] = 0;
 		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
-			tetri->block[0][k + 1] = '-';
+			tetri->block[0][k + 1] = '*';
 		k++;
 	}
 	// k = 0;
