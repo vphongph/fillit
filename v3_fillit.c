@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fillit.c                                           :+:      :+:    :+:   */
+/*   v3_fillit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/06 04:05:32 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/06 02:11:37 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,26 @@ int		detectnull(int c)
 	return (c);
 }
 
-uint32_t	detectsharpline(uint32_t c)
-{
-	c = ~(c - 0x24242424) & ~c;
-	return ((c - 0x01010101) & ~c & 0x80808080);
-}
-
-uint64_t	detectsharpcolumn(void *s)
+uint64_t	detectsharp(void *s, int size)
 {
 	uint64_t c;
 
-	c = *(uint64_t *)(s);
-	c = ~(c - 0x2424242424242424) & ~c;
-	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff;
+	c = 0;
+	if (size == 4)
+	{
+		c = *(uint32_t *)s;
+		c = ~(c - 0x24242424) & ~c;
+		c = (c - 0x01010101) & ~c & 0x80808080;
 
-	if (c)
-		return (c);
-
-	c = *(uint64_t *)(s + 10);
-	c = ~(c - 0x2424242424242424) & ~c;
-	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff;
+	}
+	if (size == 8)
+	{
+		c = *(uint64_t *)s;
+		c = ~(c - 0x2424242424242424) & ~c;
+		c = (c - 0x0101010101010101) & ~c & 0x8080808080808080;
+	}
 	return (c);
 }
-
 
 void	cut_block_short(t_block *tetri)
 {
@@ -92,44 +89,29 @@ void	cut_block_short(t_block *tetri)
 	nb = 0;
 	k = -1;
 	while (*(uint32_t *)tetri->block[0] == *(uint32_t *)"....")
-	{
-		*(uint32_t *)tetri->block[0] = *(uint32_t *)tetri->block[1];
-		*(uint32_t *)tetri->block[1] = *(uint32_t *)tetri->block[2];
-		*(uint32_t *)tetri->block[2] = *(uint32_t *)tetri->block[3];
-		*(uint32_t *)tetri->block[3] = *(uint32_t *)"....";
-	}
+		if ((*(uint32_t *)tetri->block[0] = *(uint32_t *)tetri->block[1]))
+			if ((*(uint32_t *)tetri->block[1] = *(uint32_t *)tetri->block[2]))
+				if ((*(uint32_t *)tetri->block[2] = *(uint32_t *)tetri->block[3]))
+					*(uint32_t *)tetri->block[3] = *(uint32_t *)"....";
 	while ((*(uint64_t *)tetri->block[0] & 0xff00000000ff)
 		== (*(uint64_t *)".xxxx.xx" & 0xff00000000ff)
 			&& (*(uint64_t *)tetri->block[2] & 0xff00000000ff)
 				== (*(uint64_t *)".xxxx.xx" & 0xff00000000ff))
-	{
-		*(int *)tetri->block[0] = *(int *)tetri->block[0] >> 8;
-		*(int *)tetri->block[1] = *(int *)tetri->block[1] >> 8;
-		*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8;
-		*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
-	}
-	k = 0;
+		if ((*(int *)tetri->block[0] = *(int *)tetri->block[0] >> 8))
+			if ((*(int *)tetri->block[1] = *(int *)tetri->block[1] >> 8))
+				if ((*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8))
+					*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
+	k = 5;
 	while (k < 16)
 	{
-		if (!(k % 5) && !(detectsharpline(*(uint32_t *)&tetri->block[0][k])))
+		if (!(detectsharp((uint32_t *)&tetri->block[0][k], sizeof(int))))
 			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
-			// *(uint32_t *)&tetri->block[0][k] = 0;
-		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
-			tetri->block[0][k + 1] = '-';
-		k++;
+		if (nb)
+			;
+		k += 5;
 	}
-	// k = 0;
-	// while (++k < 4)
-	// {
-	// 	if (!(detectsharpcolumn((uint64_t *)&tetri->block[0][k])))
-	// 	{
-	// 			tetri->block[0][k] = 0;
-	// 			tetri->block[1][k] = 0;
-	// 			tetri->block[2][k] = 0;
-	// 			tetri->block[3][k] = 0;
-	// 	}
-	// }
 }
+
 int		check_block(t_block *tetri)
 {
 	int neighbor = 0;
@@ -231,6 +213,9 @@ int		main(int ac, char **av)
 		// 	j = 0;
 		// 	i++;
 		// }
+
+		printf("\ndetect sharp : %#.016llx\n", detectsharp((void *)"\0\0\0##000", sizeof(int)));
+		printf("detect null : %#.08x\n", detectnull(0x42002323));
 
 		if (close(3) == -1)
 		{
