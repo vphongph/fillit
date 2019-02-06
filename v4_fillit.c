@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/06 02:46:41 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/06 04:23:57 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,20 @@ uint32_t	detectsharpline(uint32_t c)
 	return ((c - 0x01010101) & ~c & 0x80808080);
 }
 
-uint64_t	detectsharpcolumn(uint64_t *s)
+uint64_t	detectsharpcolumn(void *s)
 {
 	uint64_t c;
 
-	c = *(s + 1);
+	c = *(uint64_t *)(s);
 	c = ~(c - 0x2424242424242424) & ~c;
-	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff0000;
+	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff;
+
 	if (c)
 		return (c);
-	c = *(s + 10);
+
+	c = *(uint64_t *)(s + 10);
 	c = ~(c - 0x2424242424242424) & ~c;
-	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff0000;
+	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff;
 	return (c);
 }
 
@@ -86,16 +88,14 @@ void	cut_block_short(t_block *tetri)
 {
 	uint8_t k;
 	uint8_t nb;
-	uint32_t fdp;
 
-	fdp = (uint32_t **)tetri->block;
 	nb = 0;
 	k = -1;
 	while (*(uint32_t *)tetri->block[0] == *(uint32_t *)"....")
 	{
-		*(uint32_t *)tetri->block[0] = *(uint32_t *)tetri->block[1]
-		*(uint32_t *)tetri->block[1] = *(uint32_t *)tetri->block[2]
-		*(uint32_t *)tetri->block[2] = *(uint32_t *)tetri->block[3]
+		*(uint32_t *)tetri->block[0] = *(uint32_t *)tetri->block[1];
+		*(uint32_t *)tetri->block[1] = *(uint32_t *)tetri->block[2];
+		*(uint32_t *)tetri->block[2] = *(uint32_t *)tetri->block[3];
 		*(uint32_t *)tetri->block[3] = *(uint32_t *)"....";
 	}
 	while ((*(uint64_t *)tetri->block[0] & 0xff00000000ff)
@@ -108,17 +108,28 @@ void	cut_block_short(t_block *tetri)
 		*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8;
 		*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
 	}
-	k = 5;
+	k = 0;
 	while (k < 16)
 	{
-		if (!(detectsharpline(*(uint32_t *)&tetri->block[0][k])))
+		if (!(k % 5) && !(detectsharpline(*(uint32_t *)&tetri->block[0][k])))
 			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
-		if (!(detectsharpcolumn((uint64_t *)tetri->block[0])))
-			;
-		k += 5;
+			// *(uint32_t *)&tetri->block[0][k] = 0;
+		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
+			tetri->block[0][k + 1] = '*';
+		k++;
 	}
+	// k = 0;
+	// while (++k < 4)
+	// {
+	// 	if (!(detectsharpcolumn((uint64_t *)&tetri->block[0][k])))
+	// 	{
+	// 			tetri->block[0][k] = 0;
+	// 			tetri->block[1][k] = 0;
+	// 			tetri->block[2][k] = 0;
+	// 			tetri->block[3][k] = 0;
+	// 	}
+	// }
 }
-
 int		check_block(t_block *tetri)
 {
 	int neighbor = 0;

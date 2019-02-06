@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 13:26:35 by vphongph          #+#    #+#             */
-/*   Updated: 2019/01/31 16:38:46 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/06 17:10:51 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ char			*ft_strsub_v2(char *s, unsigned int start, size_t len);
 t_dlist			*ft_dlstnew(void *content, size_t content_size);
 int				ft_dlstdelone(t_dlist **top, void (*del)(void *, size_t));
 int				ft_dlstadd(t_dlist **top, t_dlist *new);
+int				ft_atoi(const char *str);
 
 #endif

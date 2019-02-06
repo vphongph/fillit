@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/06 04:23:57 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/06 17:55:43 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-// #include <malloc/malloc.h>
-
 
 #include "fillit.h"
 
@@ -28,68 +25,23 @@
 ** printd("%08x") pour 8 bits en hexa avec le 0x
 ** & 00, met tout à 0 donc pour ignorer
 ** & ff, met tous les bits de 1 à 1, char à chercher.
-** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN
+** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes test (voir brouillons fillit)
 */
-
-// printf("adresse 00 32 :%p, data 32 : %#.08x\n",(uint32_t *)&(tetri->block[0][0]), *(uint32_t *)&(tetri->block[0][0]));
-// printf("adresse 00 64 :%p, data 64 : %#.016llx\n",(uint64_t *)&(tetri->block[0][0]), *(uint64_t *)&(tetri->block[0][0]));
-// printf("adresse 01 32 :%p, data 32 : %#.08x\n",(uint32_t *)&(tetri->block[0][1]), *(unsigned int *)&(tetri->block[0][1]));
-// printf("adresse 01 64 :%p, data 64 : %#.016llx\n",(uint64_t *)&(tetri->block[0][1]), *(uint64_t *)&(tetri->block[0][1]));
-// printf("column literal AND: %#.016llx\n",*(uint64_t *)".xxxx.xx" & 0x0000ff00000000ff);
-// printf("column block   AND: %#.016llx\n",*(uint64_t *)tetri->block[0] & 0x0000ff00000000ff);
-
-// if ((char)0x3132 == 0x31)
-// 	endian = 0xff00000000ff0000;
-// else
-// 	endian = 0xff00000000ff;
 
 /*
 ** ATTENTION JE SUIS MALADE, BLACK MAGIC
 */
 
-/*
-** cut_block NEIGHBOR SHORT version
-*/
-#define DETECTNULL(X) ((X - 0x01010101) & ~X & 0x80808080)
-#define DETECTSHARP(X) DETECTNULL(~(X - 0x24242424) & ~X)
-
-int		detectnull(int c)
-{
-	c = (c - 0x01010101) & ~c;
-	c = c & 0x80808080;
-	return (c);
-}
-
-uint32_t	detectsharpline(uint32_t c)
+uint32_t	detectsharp(uint32_t c)
 {
 	c = ~(c - 0x24242424) & ~c;
 	return ((c - 0x01010101) & ~c & 0x80808080);
 }
 
-uint64_t	detectsharpcolumn(void *s)
-{
-	uint64_t c;
-
-	c = *(uint64_t *)(s);
-	c = ~(c - 0x2424242424242424) & ~c;
-	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff;
-
-	if (c)
-		return (c);
-
-	c = *(uint64_t *)(s + 10);
-	c = ~(c - 0x2424242424242424) & ~c;
-	c = (c - 0x0101010101010101) & ~c & 0x8080808080808080 & 0xff00000000ff;
-	return (c);
-}
-
-
 void	cut_block_short(t_block *tetri)
 {
 	uint8_t k;
-	uint8_t nb;
 
-	nb = 0;
 	k = -1;
 	while (*(uint32_t *)tetri->block[0] == *(uint32_t *)"....")
 	{
@@ -108,34 +60,53 @@ void	cut_block_short(t_block *tetri)
 		*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8;
 		*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
 	}
-	k = 0;
-	while (k < 16)
+	while (++k < 16)
 	{
-		if (!(k % 5) && !(detectsharpline(*(uint32_t *)&tetri->block[0][k])))
-			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
-			// *(uint32_t *)&tetri->block[0][k] = 0;
+		if (!(k % 5) && !(detectsharp(*(uint32_t *)&tetri->block[0][k])))
+			// *(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
+			*(uint32_t *)&tetri->block[0][k] = 0;
 		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
-			tetri->block[0][k + 1] = '*';
-		k++;
+			tetri->block[0][k + 1] = 0;
 	}
-	// k = 0;
-	// while (++k < 4)
-	// {
-	// 	if (!(detectsharpcolumn((uint64_t *)&tetri->block[0][k])))
-	// 	{
-	// 			tetri->block[0][k] = 0;
-	// 			tetri->block[1][k] = 0;
-	// 			tetri->block[2][k] = 0;
-	// 			tetri->block[3][k] = 0;
-	// 	}
-	// }
 }
+
+int		recognize(t_block *tetri)
+{
+	uint8_t i;
+	uint8_t j;
+
+	char reco[9];
+
+	ft_bzero_v2(reco, sizeof(reco));
+	i = -1;
+	j = 0;
+	while (++i < 18)
+	{
+		if (tetri->block[0][i] == '#')
+		{
+			if (i != 0 && tetri->block[0][i - 1] == '#')
+				reco[j++] = '1';
+			if (i < 14 && tetri->block[0][i + 1] == '#')
+				reco[j++] = '3';
+			if (i > 4 && tetri->block[0][i - 5] == '#')
+				reco[j++] = '2';
+			if (i < 14 && tetri->block[0][i + 5] == '#')
+				reco[j++] = '4';
+		}
+	}
+	return (ft_atoi(reco));
+}
+
+
 int		check_block(t_block *tetri)
 {
 	int neighbor = 0;
+	char reco[8];
 	int	nb = 0;
 	int j = 0;
 	int k = 0;
+
+	ft_bzero_v2(reco, sizeof(reco));
 
 	while (j < 4)
 	{
@@ -167,6 +138,9 @@ int		*check_map(int fd, t_block *tetri, int *order)
 	int i = 0;
 	int ret;
 	ret = read(fd, tetri, BUFF_SIZE);
+	int tab[27];
+
+	ft_bzero_v2(tab, sizeof(tab));
 
 	write(1,tetri[0].block[0],ret);
 
@@ -175,7 +149,7 @@ int		*check_map(int fd, t_block *tetri, int *order)
 		write(1, "error nb\n", 9);
 		return (NULL);
 	}
-	printf("nb tetri = %d\n", ret / 21 + 1);
+	printf("nb tetri = %d\n\n", ret / 21 + 1);
 	while (i < ((ret / 21) + 1))
 	{
 		if (i < (ret / 21) && tetri[i].sep != '\n')
@@ -188,10 +162,41 @@ int		*check_map(int fd, t_block *tetri, int *order)
 			write(1, "error content\n", 14);
 			return (NULL);
 		}
-
 		cut_block_short(&tetri[i]);
+		tab[i] = recognize(&tetri[i]);
 		i++;
 	}
+	i = 0;
+	int tmp = 0;
+	while (tab[i])
+	{
+		if (i > 0 && tab[i] < tab[i - 1])
+		{
+			tmp = tab[i];
+			tab[i] = tab[i - 1];
+			tab[i - 1] = tmp;
+			i--;
+		}
+		else
+			i++;
+	}
+	i = -1;
+	int j = 0;
+	while (tab[++i])
+		printf("%d\n", tab[i]);
+
+	i = -1;
+	j = -1;
+	while (tab[++j])
+	{
+		while (tab[++i])
+		{
+			if (j != i && tab[j] == tab[i])
+				write (1, "LAME!", 5);
+		}
+		i = -1;
+	}
+
 	ft_putstr_fd_v2(YELLOW"AFTER CUT\n"RESET, 1);
 	write(1, "\n", 1);
 	write(1,tetri[0].block[0],ret);
@@ -201,8 +206,6 @@ int		*check_map(int fd, t_block *tetri, int *order)
 
 int		main(int ac, char **av)
 {
-	// int i = 0;
-	// int j = 0;
 	int order[26];
 	t_block tetri[26];
 	ft_bzero_v2(tetri, sizeof(tetri));
@@ -219,18 +222,6 @@ int		main(int ac, char **av)
 			return (-1);
 		}
 		check_map(3, tetri, order);
-		// while (i < 26)
-		// {
-		// 	while (j < 4)
-		// 	{
-		// 		printf("%s\n",tetri[i].block[j]);
-		// 		printf("%c\n",tetri[i].sep);
-		// 		printf("%d %d\n", i, j);
-		// 		j++;
-		// 	}
-		// 	j = 0;
-		// 	i++;
-		// }
 
 		if (close(3) == -1)
 		{

@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/02 00:21:57 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/06 17:10:26 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCS	=	ft_memalloc.c		\
 			ft_strsub_v2.c		\
 			ft_dlstnew.c		\
 			ft_dlstdelone.c		\
-			ft_dlstadd.c
+			ft_dlstadd.c		\
+			ft_atoi.c
 
 OBJS	=	$(SRCS:.c=.o)
 
