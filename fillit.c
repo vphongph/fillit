@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/07 14:51:19 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/07 15:47:31 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,10 @@ void	cut_block(t_block *tetri)
 			tetri->block[0][k + 1] = '*';
 	}
 }
+
+/*
+** ATTENTION sens de lecture important pour le recognize, sinon conflit entre le S et L90
+*/
 
 int		recognize(t_block *tetri)
 {
