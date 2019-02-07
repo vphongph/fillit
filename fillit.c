@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/06 17:55:43 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/07 03:22:49 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,24 @@ void	cut_block_short(t_block *tetri)
 	while (++k < 16)
 	{
 		if (!(k % 5) && !(detectsharp(*(uint32_t *)&tetri->block[0][k])))
-			// *(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
-			*(uint32_t *)&tetri->block[0][k] = 0;
+			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
+			// *(uint32_t *)&tetri->block[0][k] = 0;
 		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
-			tetri->block[0][k + 1] = 0;
+			tetri->block[0][k + 1] = '*';
 	}
 }
 
 int		recognize(t_block *tetri)
 {
-	uint8_t i;
-	uint8_t j;
+	int8_t i;
+	int8_t j;
 
 	char reco[9];
 
 	ft_bzero_v2(reco, sizeof(reco));
-	i = -1;
+	i = 20;
 	j = 0;
-	while (++i < 18)
+	while (--i >= 0)
 	{
 		if (tetri->block[0][i] == '#')
 		{
@@ -94,6 +94,7 @@ int		recognize(t_block *tetri)
 				reco[j++] = '4';
 		}
 	}
+	printf(ORDER"%s\n"RESET, reco);
 	return (ft_atoi(reco));
 }
 
@@ -149,7 +150,6 @@ int		*check_map(int fd, t_block *tetri, int *order)
 		write(1, "error nb\n", 9);
 		return (NULL);
 	}
-	printf("nb tetri = %d\n\n", ret / 21 + 1);
 	while (i < ((ret / 21) + 1))
 	{
 		if (i < (ret / 21) && tetri[i].sep != '\n')
@@ -166,6 +166,13 @@ int		*check_map(int fd, t_block *tetri, int *order)
 		tab[i] = recognize(&tetri[i]);
 		i++;
 	}
+
+	ft_putstr_fd_v2(YELLOW"AFTER CUT\n"RESET, 1);
+	write(1, "\n", 1);
+	write(1,tetri[0].block[0],ret);
+
+	printf(PINK"nb tetri = %d\n\n"RESET, ret / 21 + 1);
+
 	i = 0;
 	int tmp = 0;
 	while (tab[i])
@@ -183,7 +190,9 @@ int		*check_map(int fd, t_block *tetri, int *order)
 	i = -1;
 	int j = 0;
 	while (tab[++i])
-		printf("%d\n", tab[i]);
+		printf(ALLIANCE"%d\n"RESET, tab[i]);
+	printf("\n");
+
 
 	i = -1;
 	j = -1;
@@ -192,14 +201,14 @@ int		*check_map(int fd, t_block *tetri, int *order)
 		while (tab[++i])
 		{
 			if (j != i && tab[j] == tab[i])
-				write (1, "LAME!", 5);
+			{
+				printf(YELLOW"LAME!\n"RESET);
+				return (0);
+			}
 		}
 		i = -1;
 	}
 
-	ft_putstr_fd_v2(YELLOW"AFTER CUT\n"RESET, 1);
-	write(1, "\n", 1);
-	write(1,tetri[0].block[0],ret);
 
 	return (order);
 }
