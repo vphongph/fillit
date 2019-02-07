@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/07 14:46:26 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/07 14:51:19 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,14 +165,14 @@ int		*check_map(int fd, t_block *tetri, int *order)
 {
 	int i = 0;
 	int ret;
-	ret = read(fd, tetri, BUFF_SIZE);
+	ret = read(fd, tetri, BUFF_SIZE + 1);
 	int tab[27];
 
 	ft_bzero_v2(tab, sizeof(tab));
 
 	write(1,tetri[0].block[0],ret);
 
-	if (ret % 21 != 20)
+	if (ret > BUFF_SIZE && ret % 21 != 20)
 	{
 		write(1, "error nb\n", 9);
 		return (NULL);
