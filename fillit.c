@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/07 03:22:49 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/07 14:46:26 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,25 @@
 ** ATTENTION JE SUIS MALADE, BLACK MAGIC
 */
 
+void		set_char(t_block *tetri)
+{
+	static char c = 'A';
+	int8_t i;
+
+	i = -1;
+	while (++i < 19)
+		if (tetri->block[0][i] == '#')
+			tetri->block[0][i] = c;
+	c++;
+}
+
 uint32_t	detectsharp(uint32_t c)
 {
 	c = ~(c - 0x24242424) & ~c;
 	return ((c - 0x01010101) & ~c & 0x80808080);
 }
 
-void	cut_block_short(t_block *tetri)
+void	cut_block(t_block *tetri)
 {
 	uint8_t k;
 
@@ -78,20 +90,35 @@ int		recognize(t_block *tetri)
 	char reco[9];
 
 	ft_bzero_v2(reco, sizeof(reco));
-	i = 20;
+	// i = 20;
+	i = -1;
 	j = 0;
-	while (--i >= 0)
+	// while (--i >= 0)
+	// {
+	// 	if (tetri->block[0][i] == '#')
+	// 	{
+	// 		if (i != 0 && tetri->block[0][i - 1] == '#')
+	// 			reco[j++] = '1';
+	// 		if (i < 14 && tetri->block[0][i + 1] == '#')
+	// 			reco[j++] = '3';
+	// 		if (i > 4 && tetri->block[0][i - 5] == '#')
+	// 			reco[j++] = '2';
+	// 		if (i < 14 && tetri->block[0][i + 5] == '#')
+	// 			reco[j++] = '4';
+	// 	}
+	// }
+	while (++i < 19)
 	{
 		if (tetri->block[0][i] == '#')
 		{
+			if (i < 19 && tetri->block[0][i + 1] == '#')
+				reco[j++] = '3';
 			if (i != 0 && tetri->block[0][i - 1] == '#')
 				reco[j++] = '1';
-			if (i < 14 && tetri->block[0][i + 1] == '#')
-				reco[j++] = '3';
-			if (i > 4 && tetri->block[0][i - 5] == '#')
-				reco[j++] = '2';
 			if (i < 14 && tetri->block[0][i + 5] == '#')
 				reco[j++] = '4';
+			if (i > 4 && tetri->block[0][i - 5] == '#')
+				reco[j++] = '2';
 		}
 	}
 	printf(ORDER"%s\n"RESET, reco);
@@ -162,8 +189,9 @@ int		*check_map(int fd, t_block *tetri, int *order)
 			write(1, "error content\n", 14);
 			return (NULL);
 		}
-		cut_block_short(&tetri[i]);
+		cut_block(&tetri[i]);
 		tab[i] = recognize(&tetri[i]);
+		set_char(&tetri[i]);
 		i++;
 	}
 
