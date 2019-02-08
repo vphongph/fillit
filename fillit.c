@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/07 15:47:31 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/08 00:12:40 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 ** à partir de l'adresse suivante
 ** *(int *)"...." = 2e2e2e2e
 ** tetri->block[j] = &tetri->block[j][0]
-** printd("%08x") pour 8 bits en hexa avec le 0x
+** printf("%08x") pour 8 bits en hexa avec le 0x
 ** & 00, met tout à 0 donc pour ignorer
 ** & ff, met tous les bits de 1 à 1, char à chercher.
 ** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes test (voir brouillons fillit)
@@ -44,7 +44,7 @@ void		set_char(t_block *tetri)
 	c++;
 }
 
-uint32_t	detectsharp(uint32_t c)
+int32_t	detectsharp(int32_t c)
 {
 	c = ~(c - 0x24242424) & ~c;
 	return ((c - 0x01010101) & ~c & 0x80808080);
@@ -52,20 +52,20 @@ uint32_t	detectsharp(uint32_t c)
 
 void	cut_block(t_block *tetri)
 {
-	uint8_t k;
+	int8_t k;
 
 	k = -1;
-	while (*(uint32_t *)tetri->block[0] == *(uint32_t *)"....")
+	while (*(int32_t *)tetri->block[0] == *(int32_t *)"....")
 	{
-		*(uint32_t *)tetri->block[0] = *(uint32_t *)tetri->block[1];
-		*(uint32_t *)tetri->block[1] = *(uint32_t *)tetri->block[2];
-		*(uint32_t *)tetri->block[2] = *(uint32_t *)tetri->block[3];
-		*(uint32_t *)tetri->block[3] = *(uint32_t *)"....";
+		*(int32_t *)tetri->block[0] = *(int32_t *)tetri->block[1];
+		*(int32_t *)tetri->block[1] = *(int32_t *)tetri->block[2];
+		*(int32_t *)tetri->block[2] = *(int32_t *)tetri->block[3];
+		*(int32_t *)tetri->block[3] = *(int32_t *)"....";
 	}
-	while ((*(uint64_t *)tetri->block[0] & 0xff00000000ff)
-		== (*(uint64_t *)".xxxx.xx" & 0xff00000000ff)
-			&& (*(uint64_t *)tetri->block[2] & 0xff00000000ff)
-				== (*(uint64_t *)".xxxx.xx" & 0xff00000000ff))
+	while ((*(int64_t *)tetri->block[0] & 0xff00000000ff)
+		== (*(int64_t *)".xxxx.xx" & 0xff00000000ff)
+			&& (*(int64_t *)tetri->block[2] & 0xff00000000ff)
+				== (*(int64_t *)".xxxx.xx" & 0xff00000000ff))
 	{
 		*(int *)tetri->block[0] = *(int *)tetri->block[0] >> 8;
 		*(int *)tetri->block[1] = *(int *)tetri->block[1] >> 8;
@@ -74,9 +74,9 @@ void	cut_block(t_block *tetri)
 	}
 	while (++k < 16)
 	{
-		if (!(k % 5) && !(detectsharp(*(uint32_t *)&tetri->block[0][k])))
-			*(uint32_t *)&tetri->block[0][k] = *(uint32_t *)"----";
-			// *(uint32_t *)&tetri->block[0][k] = 0;
+		if (!(k % 5) && !(detectsharp(*(int32_t *)&tetri->block[0][k])))
+			*(int32_t *)&tetri->block[0][k] = *(int32_t *)"----";
+			// *(int32_t *)&tetri->block[0][k] = 0;
 		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
 			tetri->block[0][k + 1] = '*';
 	}
@@ -84,6 +84,7 @@ void	cut_block(t_block *tetri)
 
 /*
 ** ATTENTION sens de lecture important pour le recognize, sinon conflit entre le S et L90
+** il faut droite gauche et bas haut. Si droite gauche et haut bas, lire à l'envers.
 */
 
 int		recognize(t_block *tetri)
@@ -94,23 +95,8 @@ int		recognize(t_block *tetri)
 	char reco[9];
 
 	ft_bzero_v2(reco, sizeof(reco));
-	// i = 20;
 	i = -1;
 	j = 0;
-	// while (--i >= 0)
-	// {
-	// 	if (tetri->block[0][i] == '#')
-	// 	{
-	// 		if (i != 0 && tetri->block[0][i - 1] == '#')
-	// 			reco[j++] = '1';
-	// 		if (i < 14 && tetri->block[0][i + 1] == '#')
-	// 			reco[j++] = '3';
-	// 		if (i > 4 && tetri->block[0][i - 5] == '#')
-	// 			reco[j++] = '2';
-	// 		if (i < 14 && tetri->block[0][i + 5] == '#')
-	// 			reco[j++] = '4';
-	// 	}
-	// }
 	while (++i < 19)
 	{
 		if (tetri->block[0][i] == '#')
@@ -202,6 +188,7 @@ int		*check_map(int fd, t_block *tetri, int *order)
 	ft_putstr_fd_v2(YELLOW"AFTER CUT\n"RESET, 1);
 	write(1, "\n", 1);
 	write(1,tetri[0].block[0],ret);
+	// printf("%s\n", tetri[0].block[0]);
 
 	printf(PINK"nb tetri = %d\n\n"RESET, ret / 21 + 1);
 
