@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/08 00:12:40 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/11 02:35:39 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,15 @@
 ** printf("%08x") pour 8 bits en hexa avec le 0x
 ** & 00, met tout à 0 donc pour ignorer
 ** & ff, met tous les bits de 1 à 1, char à chercher.
-** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes test (voir brouillons fillit)
+** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes tests 
+** (voir brouillons fillit)
 */
 
 /*
-** ATTENTION JE SUIS MALADE, BLACK MAGIC
+** ATTENTION JE SUIS MALADE
 */
 
-void		set_char(t_block *tetri)
+void	set_char(t_block *tetri)
 {
 	static char c = 'A';
 	int8_t i;
@@ -50,11 +51,24 @@ int32_t	detectsharp(int32_t c)
 	return ((c - 0x01010101) & ~c & 0x80808080);
 }
 
-void	cut_block(t_block *tetri)
+void	delimit_block(t_block *tetri)
 {
 	int8_t k;
 
-	k = -1;
+	k = 0;
+	while (k <= 15)
+	{
+		if (!(k % 5) && !(detectsharp(*(int32_t *)&tetri->block[0][k])))
+			*(int32_t *)&tetri->block[0][k] = *(int32_t *)"----";
+			// *(int32_t *)&tetri->block[0][k] = 0;
+		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
+			tetri->block[0][k + 1] = '*';
+		k++;
+	}
+}
+
+void	cut_block(t_block *tetri)
+{
 	while (*(int32_t *)tetri->block[0] == *(int32_t *)"....")
 	{
 		*(int32_t *)tetri->block[0] = *(int32_t *)tetri->block[1];
@@ -72,14 +86,7 @@ void	cut_block(t_block *tetri)
 		*(int *)tetri->block[2] = *(int *)tetri->block[2] >> 8;
 		*(int *)tetri->block[3] = *(int *)tetri->block[3] >> 8;
 	}
-	while (++k < 16)
-	{
-		if (!(k % 5) && !(detectsharp(*(int32_t *)&tetri->block[0][k])))
-			*(int32_t *)&tetri->block[0][k] = *(int32_t *)"----";
-			// *(int32_t *)&tetri->block[0][k] = 0;
-		if (tetri->block[0][k] == '#' && tetri->block[0][k + 1] == '.')
-			tetri->block[0][k + 1] = '*';
-	}
+	delimit_block(tetri);
 }
 
 /*
@@ -87,16 +94,15 @@ void	cut_block(t_block *tetri)
 ** il faut droite gauche et bas haut. Si droite gauche et haut bas, lire à l'envers.
 */
 
-int		recognize(t_block *tetri)
+int		recognize_block(t_block *tetri)
 {
 	int8_t i;
 	int8_t j;
-
 	char reco[9];
 
-	ft_bzero_v2(reco, sizeof(reco));
 	i = -1;
 	j = 0;
+	ft_bzero_v2(reco, sizeof(reco));
 	while (++i < 19)
 	{
 		if (tetri->block[0][i] == '#')
@@ -116,36 +122,51 @@ int		recognize(t_block *tetri)
 }
 
 
-int		check_block(t_block *tetri)
+int8_t	check_block(t_block tetri)
 {
 	int neighbor = 0;
-	char reco[8];
 	int	nb = 0;
-	int j = 0;
-	int k = 0;
+	// int j = 0;
+	int k = -1;
 
-	ft_bzero_v2(reco, sizeof(reco));
-
-	while (j < 4)
+	// while (j < 4)
+	// {
+		// if (tetri.block[j][4] != '\n')
+			// return (0);
+	// 	while (k < 4)
+	// 	{
+			// if (tetri.block[j][k] != '.' && tetri.block[j][k] != '#')
+			// 	return (0);
+			// if (tetri.block[j][k] == '#' && ++nb)
+			// {
+			// 	if (k != 0 && tetri.block[j][k - 1] == '#')
+			// 		neighbor++;
+			// 	if (j != 0 && tetri.block[j - 1][k] == '#')
+			// 		neighbor++;
+			// }
+	// 		k++;
+	// 	}
+	// 	k = 0;
+	// 	j++;
+	// }
+	if (!((*(int64_t *)&tetri.block[0][2] & 0xff00000000ff0000)
+		== (*(int64_t *)"xx\nxxxx\n" & 0xff00000000ff0000)
+			&& (*(int64_t *)&tetri.block[0][12] & 0xff00000000ff0000)
+				== (*(int64_t *)"xx\nxxxx\n" & 0xff00000000ff0000)))
+		return (0);
+	while (++k <= 19)
 	{
-		if (tetri->block[j][4] != '\n')
-			return (0);
-		while (k < 4)
-		{
-			if (tetri->block[j][k] != '.' && tetri->block[j][k] != '#')
+		if (k % 5tetri.block[0][k] != '.' && tetri.block[0][k] != '#')
 				return (0);
-			if (tetri->block[j][k] == '#' && ++nb)
-			{
-				if (k != 0 && tetri->block[j][k - 1] == '#')
-					neighbor++;
-				if (j != 0 && tetri->block[j - 1][k] == '#')
-					neighbor++;
-			}
-			k++;
+		if (tetri.block[0][k] == '#' && ++nb)
+		{
+			if (k != 0 && tetri.block[0][k - 1] == '#')
+				neighbor++;
+			if (k > 4 && tetri.block[0][k - 5] == '#')
+				neighbor++;
 		}
-		k = 0;
-		j++;
 	}
+	printf("%d\n", neighbor);
 	if ((neighbor != 3 && neighbor != 4) || nb != 4)
 		return (0);
 	return (1);
@@ -174,21 +195,20 @@ int		*check_map(int fd, t_block *tetri, int *order)
 			write(1, "error sep\n", 10);
 			return (NULL);
 		}
-		if (!check_block(&tetri[i]))
+		if (!check_block(tetri[i]))
 		{
 			write(1, "error content\n", 14);
 			return (NULL);
 		}
 		cut_block(&tetri[i]);
-		tab[i] = recognize(&tetri[i]);
-		set_char(&tetri[i]);
+		tab[i] = recognize_block(&tetri[i]);
+		// set_char(&tetri[i]);
 		i++;
 	}
 
 	ft_putstr_fd_v2(YELLOW"AFTER CUT\n"RESET, 1);
 	write(1, "\n", 1);
 	write(1,tetri[0].block[0],ret);
-	// printf("%s\n", tetri[0].block[0]);
 
 	printf(PINK"nb tetri = %d\n\n"RESET, ret / 21 + 1);
 
