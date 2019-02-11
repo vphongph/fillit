@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/11 17:13:41 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/11 17:10:51 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,31 @@ int		recognize_block(t_block *tetri)
 
 int8_t	check_block(t_block tetri)
 {
-	int8_t	neighbor;
-	int8_t	nb;
-	int8_t	k;
+	int8_t	neighbor = 0;
+	int8_t	nb = 0;
+	// int j = 0;
+	int8_t	k = -1;
 
-	neighbor = 0;
-	nb = 0;
-	k = 0;
+	// while (j < 4)
+	// {
+		// if (tetri.block[j][4] != '\n')
+			// return (0);
+	// 	while (k < 4)
+	// 	{
+			// if (tetri.block[j][k] != '.' && tetri.block[j][k] != '#')
+			// 	return (0);
+			// if (tetri.block[j][k] == '#' && ++nb)
+			// {
+			// 	if (k != 0 && tetri.block[j][k - 1] == '#')
+			// 		neighbor++;
+			// 	if (j != 0 && tetri.block[j - 1][k] == '#')
+			// 		neighbor++;
+			// }
+	// 		k++;
+	// 	}
+	// 	k = 0;
+	// 	j++;
+	// }
 	while (++k <= 18)
 	{
 		if (tetri.block[0][k] == '#' && ++nb)

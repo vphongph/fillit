@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/03 19:21:15 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/11 17:16:13 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define RED		"\e[38;2;255;0;0m"
 # define RESET		"\e[0m"
 # define BUFF_SIZE	21 * 26 - 1
+# define MASK
 # define O_0	10
 # define I_0	20
 # define I_90	21
