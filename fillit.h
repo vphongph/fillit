@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/11 17:16:13 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/12 03:12:05 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@
 **  OO  I   T   L    J   ZZ  SS
 **      I       LL  JJ
 **      I
+**
+** 0xff00000000ff = 0x0000ff00000000ff
 */
 
 #ifndef FILLIT_H
 # define FILLIT_H
-# define RED		"\e[38;2;255;0;0m"
-# define RESET		"\e[0m"
-# define BUFF_SIZE	21 * 26 - 1
-# define MASK
+# define RED			"\e[38;2;255;0;0m"
+# define RESET			"\e[0m"
+# define BUFF_SIZE		21 * 26 - 1
+# define MASK_NL		0xff00000000ff0000
+# define MASK_1STCOL	0xff00000000ff
 # define O_0	10
 # define I_0	20
 # define I_90	21
@@ -52,7 +55,7 @@
 
 typedef struct	s_block{
 
-	char	block[4][5];
+	char	content[4][5];
 	char	sep;
 }				t_block;
 
