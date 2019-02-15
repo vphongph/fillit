@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/12 03:12:05 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/15 22:36:06 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # define BUFF_SIZE		21 * 26 - 1
 # define MASK_NL		0xff00000000ff0000
 # define MASK_1STCOL	0xff00000000ff
+# define OK		0
+# define NOOK	1
 # define O_0	10
 # define I_0	20
 # define I_90	21
@@ -52,11 +54,16 @@
 # define S_0	70
 # define S_90	71
 # include "libft/libft.h"
+# include <stdlib.h>
 
 typedef struct	s_block{
 
 	char	content[4][5];
 	char	sep;
 }				t_block;
+
+int8_t			check_block(int16_t ret, t_block *block);
+int16_t			check_main_read(int ac, char **av, t_block *block);
+void			cut_block(t_block *block);
 
 #endif

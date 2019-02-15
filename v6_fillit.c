@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fillit.c                                           :+:      :+:    :+:   */
+/*   v6_fillit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/11 17:10:51 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/15 20:58:35 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 ** printf("%08x") pour 8 bits en hexa avec le 0x
 ** & 00, met tout à 0 donc pour ignorer
 ** & ff, met tous les bits de 1 à 1, char à chercher.
-** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes tests 
+** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes tests
 ** (voir brouillons fillit)
 */
 
