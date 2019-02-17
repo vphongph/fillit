@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/17 02:06:24 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/17 06:04:15 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,25 +29,42 @@ SRCS	=	fillit.c		\
 
 OBJS	=	$(SRCS:.c=.o)
 
-.PHONY	:	all clean fclean re
+# INCLUDE_DIR= include/
+# HDRS = $(addprefix $(INCLUDE_DIR), fillit.h)
+
+HDRS 	=	fillit.h
+
+.PHONY	:	all clean fclean re run
 
 all		:	$(EXEC)
-# ifeq ($(DEBUG), yes)
-# 		@echo -e "\e[38;2;51;196;127mMODE DEBUG\e[0m"
-# else
-# 		@echo "\e[38;2;51;196;127mMODE NORMAL\e[0m"
-# endif
+
+ifeq ($(DEBUG), yes)
+		@echo -e "\e[38;2;51;196;127mMODE DEBUG\e[0m"
+else
+		@echo "\e[38;2;51;196;127mMODE NORMAL\e[0m"
+endif
 
 $(EXEC)	:	$(OBJS)
-		$(CC) $(CFLAGS) $(INC) $(OBJS) -o $(EXEC)
+		$(CC) $(CFLAGS) $(INC) $^ -o $(EXEC)
 
-%.o	: %.c
-	@$(CC) $(CFLAGS) $< -c -o $@
+%.o		:	%.c	$(HDRS)
+		$(CC) $(CFLAGS) $< -c -o $@
 
 clean	:
-		@/bin/rm -f $(OBJS)
+		/bin/rm -f $(OBJS)
 
 fclean	:	clean
-		@/bin/rm -f $(NAME)
+		/bin/rm -f $(EXEC)
 
 re		:	fclean all
+
+# @echo $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
+RUN_ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+		@$(eval $(RUN_ARGS):;@:)
+
+prog: # ...
+	# ...
+
+
+run		: prog
+		./$(EXEC) ${RUN_ARGS}
