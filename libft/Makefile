@@ -6,15 +6,32 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/06 17:10:26 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/18 21:56:28 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+blink		= 	"\033[5m"
+purple_dark	= 	"\033[38;5;62m"
+green_dark	= 	"\033[38;5;28m"
+red_dark	= 	"\033[38;5;88m"
+grey		=	"\033[38;5;242m"
+yellow		= 	"\033[38;5;178m"
+reset		= 	"\033[0m"
+
 NAME	=	libft.a
 
-CFLAGS	=	-Wall -Wextra -Werror -fsanitize=address
+ifeq ($(DEBUG), yes)
+CFLAGS		=	-Wall -Wextra -Werror -g3 -fsanitize=address
+BUG 	=	1
+
+else
+CFLAGS		=	-Wall -Wextra -Werror
+BUG 	=	0
+endif
 
 CC		=	gcc
+
+HDRS	=	libft.h
 
 SRCS	=	ft_memalloc.c		\
 			ft_memdel.c			\
@@ -33,15 +50,30 @@ SRCS	=	ft_memalloc.c		\
 OBJS	=	$(SRCS:.c=.o)
 
 all		:	$(NAME)
+		@echo "nothing to do in $(NAME)"
 
 $(NAME)	:	$(OBJS)
-		ar r $(NAME) $(OBJS)
-		ranlib $(NAME)
+		@ar r $(NAME) $(OBJS) 2>/dev/null
+		@echo $(purple_dark)" Making lib" $(purple_dark)"->"$(reset) $@
+		@ranlib $(NAME)
+		@echo $(purple_dark)" Sorting lib"$(reset)
+
+ifeq ($(DEBUG), yes)
+		@echo $(yellow)" DEBUG MODE $(NAME)"$(reset)
+else
+		@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
+endif
+
+%.o		: %.c $(HDRS)
+		@$(CC) $(CFLAGS) -c $< -o $@
+		@echo $(purple_dark)" Compiling" $(grey)$< $(purple_dark)"->" $(grey)$@$(reset)
 
 clean	:
-		/bin/rm -f $(OBJS)
+		@/bin/rm -f $(OBJS)
+		@echo $(red_dark)" Removing objects from" $(grey)$(NAME)$(reset)
 
 fclean	:	clean
-		/bin/rm -f $(NAME)
+		@/bin/rm -f $(NAME)
+		@echo $(red_dark)" Removing lib" $(grey)$(NAME)$(reset)
 
 re		:	fclean all

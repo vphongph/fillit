@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/18 13:31:33 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/18 21:53:19 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ void	parse_block(int16_t ret, t_block *block)
 		exit(EXIT_FAILURE);
 	}
 	while (++i < ((ret / 21) + 1))
+	{
 		cut_block(&block[i]);
+		recognize_block(block[i], i);
+	}
 	printf(PINK"nb block = %d\n"RESET, ret / 21 + 1);
 }
 

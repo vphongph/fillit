@@ -6,9 +6,11 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 13:34:32 by vphongph          #+#    #+#             */
-/*   Updated: 2018/12/04 23:18:56 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/18 21:03:22 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <unistd.h>
 
 int		ft_atoi(const char *str)
 {
@@ -26,7 +28,9 @@ int		ft_atoi(const char *str)
 		return (-1);
 	if (nb > 9223372036854775808ULL && s == -1)
 		return (0);
+	write(1, "co\n", 3);
 	return (nb * s);
+
 }
 
 /*
