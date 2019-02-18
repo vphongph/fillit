@@ -6,65 +6,83 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/17 06:04:15 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/18 15:02:47 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-EXEC	=	fillit
-DEBUG	=	yes
+green_dark	= 	"\033[38;5;28m"
+red_dark	= 	"\033[38;5;88m"
+reset_col	= 	"\033[0m"
 
-ifeq ($(DEBUG), yes)
-		CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
-else
-		CFLAGS	=	-Wall -Wextra -Werror
-endif
+EXEC		=	fillit
+DEBUG		=	yes
 
-CC		=	gcc
+# ifeq ($(DEBUG), yes)
+CFLAGS		=	-Wall -Wextra -Werror -g3 -fsanitize=address
+# else
+# CFLAGS		=	-Wall -Wextra -Werror
+# endif
 
-INC		=	libft/libft.a
+CC			=	gcc
 
-SRCS	=	fillit.c		\
-			checking.c		\
-			cutting.c
+INC			=	libft/libft.a
 
+SRCS		=	fillit.c		\
+				checking.c		\
+				cutting.c
+
+DIR_OBJS	=	object
+# OBJS	=	$(addprefix $(DIR_OBJS), $(SRCS:.c=.o))
 OBJS	=	$(SRCS:.c=.o)
 
-# INCLUDE_DIR= include/
+
+
+# DIR_SRCS	=
 # HDRS = $(addprefix $(INCLUDE_DIR), fillit.h)
-
 HDRS 	=	fillit.h
-
-.PHONY	:	all clean fclean re run
-
-all		:	$(EXEC)
-
-ifeq ($(DEBUG), yes)
-		@echo -e "\e[38;2;51;196;127mMODE DEBUG\e[0m"
-else
-		@echo "\e[38;2;51;196;127mMODE NORMAL\e[0m"
-endif
-
-$(EXEC)	:	$(OBJS)
-		$(CC) $(CFLAGS) $(INC) $^ -o $(EXEC)
-
-%.o		:	%.c	$(HDRS)
-		$(CC) $(CFLAGS) $< -c -o $@
-
-clean	:
-		/bin/rm -f $(OBJS)
-
-fclean	:	clean
-		/bin/rm -f $(EXEC)
-
-re		:	fclean all
 
 # @echo $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
 RUN_ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-		@$(eval $(RUN_ARGS):;@:)
 
-prog: # ...
-	# ...
+.PHONY	:	all clean fclean re run lol
+
+all		:	$(EXEC)
+
+$(EXEC)	:	$(OBJS)
+		@make -C libft/
+		@$(CC) $(CFLAGS) $(INC) $^ -o $(EXEC)
+		@echo $(green_dark) "Compiling $(INC) $^ -> $@" $(reset_col)
+
+%.o		: %.c $(HDRS)
+		@$(CC) $(CFLAGS) -c $< -o $@
+		@echo $(green_dark) "Compiling $< -> $@" $(reset_col)
 
 
-run		: prog
-		./$(EXEC) ${RUN_ARGS}
+clean	:
+		@/bin/rm -f $(OBJS)
+		@echo $(red_dark)"Removing objects" $(reset_col)
+
+fclean	:	clean
+		@make fclean -C libft/
+		@/bin/rm -f $(EXEC)
+		@echo $(red_dark)"Removing binary" $(reset_col)
+
+re		:	fclean all
+
+
+ifeq ($(firstword $(MAKECMDGOALS)), run)
+ifndef VERBOSE
+.SILENT	:
+endif
+endif
+
+run		: $(EXEC)
+		./$(EXEC) $(RUN_ARGS)
+
+lol		:
+	/bin/mkdir $(DIR_OBJS) 2>/dev/null || true
+
+# @echo -e "\e[38;2;51;196;127mMODE DEBUG\e[0m"#
+# else
+# 		@echo "\e[38;2;51;196;127mMODE NORMAL\e[0m"
+# endif
