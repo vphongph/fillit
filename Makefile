@@ -6,12 +6,14 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/18 22:01:29 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/19 01:33:36 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 blink		= 	"\033[5m"
 purple_dark	= 	"\033[38;5;62m"
+purple		= 	"\033[38;5;98m"
+green		= 	"\033[38;5;70m"
 green_dark	= 	"\033[38;5;28m"
 red_dark	= 	"\033[38;5;88m"
 grey		=	"\033[38;5;242m"
@@ -22,48 +24,37 @@ EXEC		=	fillit
 
 ifeq ($(DEBUG), yes)
 	CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
-	BUG 	=	1
 else
 	CFLAGS	=	-Wall -Wextra -Werror
-	BUG 	=	0
 endif
 
 CC			=	gcc
 
-# DIR_INC
-
 INCLUDED	=	libft/libft.a
-
-INCLUDEDLIB =	libft/
 
 SRCS		=	fillit.c		\
 				checking.c		\
 				cutting.c
 
 DIR_OBJS	=	object
+
 # OBJS	=	$(addprefix $(DIR_OBJS), $(SRCS:.c=.o))
 OBJS	=	$(SRCS:.c=.o)
 
 
-
-# DIR_SRCS	=
 # HDRS = $(addprefix $(INCLUDE_DIR), fillit.h)
 HDRS 	=	fillit.h
 
 # @echo $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
 RUN_ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
-.PHONY	:	all clean fclean re run
+.PHONY	:	all makeinclude clean fclean re run
 
-all		: lolilol $(EXEC)
-ifneq ($(firstword $(MAKECMDGOALS)), run)
-	@echo "make $(EXEC) over"
-endif
+all		: makeinclude $(EXEC)
 
-
-$(EXEC)	: $(OBJS) $(INCLUDEDLIB)
+$(EXEC)	:$(INCLUDED) $(OBJS)
 		@$(CC) $(CFLAGS) libft/libft.a $(OBJS) -o $(EXEC)
-		@echo $(green_dark)" Compiling  $^ -> $@"$(reset)
+		@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
 
 ifeq ($(DEBUG), yes)
 		@echo $(yellow)" DEBUG MODE $(EXEC)"$(reset)
@@ -72,25 +63,37 @@ else
 endif
 
 
-lolilol :
+makeinclude :
+ifeq ($(firstword $(MAKECMDGOALS)), re)
+		@make re -C libft/
+else
 		@make -C libft/
+endif
 
 %.o		: %.c $(HDRS)
+ifneq ($(firstword $(MAKECMDGOALS)), re)
+		@echo $(green)" NEW" $?
+endif
 		@$(CC) $(CFLAGS) -c $< -o $@
-		@echo $(green_dark)" Compiling $< -> $@"$(reset)
+		@echo $(green_dark)"  Compiling" $(grey)$< $(green_dark)"->" $(grey)"$@"$(reset)
 
 clean	:
+ifneq ($(firstword $(MAKECMDGOALS)), fclean)
+ifneq ($(firstword $(MAKECMDGOALS)), re)
 		@make clean -C libft/
+endif
+endif
 		@/bin/rm -f $(OBJS)
 		@echo $(red_dark)" Removing objects from" $(grey)$(EXEC)$(reset)
 
 fclean	:	clean
+ifneq ($(firstword $(MAKECMDGOALS)), re)
 		@make fclean -C libft/
+endif
 		@/bin/rm -f $(EXEC)
 		@echo $(red_dark)" Removing binary" $(grey)$(EXEC)$(reset)
 
-re		:	fclean all
-
+re		: fclean all
 
 ifeq ($(firstword $(MAKECMDGOALS)), run)
 ifndef VERBOSE
@@ -100,8 +103,3 @@ endif
 
 run		: all
 		./$(EXEC) $(RUN_ARGS)
-
-lol		:
-	/bin/mkdir $(DIR_OBJS) 2>/dev/null || true
-
-
