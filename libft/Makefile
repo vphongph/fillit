@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/19 01:31:49 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/19 16:29:22 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ blink		= 	"\033[5m"
 purple_dark	= 	"\033[38;5;62m"
 purple		= 	"\033[38;5;98m"
 green_dark	= 	"\033[38;5;28m"
+red			= 	"\033[38;5;196m"
 red_dark	= 	"\033[38;5;88m"
 grey		=	"\033[38;5;242m"
 yellow		= 	"\033[38;5;178m"
@@ -58,7 +59,7 @@ $(NAME)	:	$(OBJS)
 		@echo $(purple_dark)" Indexing lib"$(reset)
 
 ifeq ($(DEBUG), yes)
-		@echo $(yellow)" DEBUG MODE $(NAME)"$(reset)
+		@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"$(reset)
 else
 		@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
 endif

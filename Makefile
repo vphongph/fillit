@@ -6,15 +6,16 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/19 01:33:36 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/19 16:37:29 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-blink		= 	"\033[5m"
+blink		= 	"\033[5:m"
 purple_dark	= 	"\033[38;5;62m"
 purple		= 	"\033[38;5;98m"
 green		= 	"\033[38;5;70m"
 green_dark	= 	"\033[38;5;28m"
+red			= 	"\033[38;5;196m"
 red_dark	= 	"\033[38;5;88m"
 grey		=	"\033[38;5;242m"
 yellow		= 	"\033[38;5;178m"
@@ -30,7 +31,7 @@ endif
 
 CC			=	gcc
 
-INCLUDED	=	libft/libft.a
+INCLUDED	=	libft.a
 
 SRCS		=	fillit.c		\
 				checking.c		\
@@ -51,13 +52,16 @@ RUN_ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 .PHONY	:	all makeinclude clean fclean re run
 
 all		: makeinclude $(EXEC)
+ifeq ($(DEBUG), yes)
+		@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(EXEC)"\
+		$(grey)"don't forget debug mode for libs"$(reset)
+endif
 
-$(EXEC)	:$(INCLUDED) $(OBJS)
+$(EXEC)	: libft/libft.a $(OBJS)
 		@$(CC) $(CFLAGS) libft/libft.a $(OBJS) -o $(EXEC)
 		@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
-
 ifeq ($(DEBUG), yes)
-		@echo $(yellow)" DEBUG MODE $(EXEC)"$(reset)
+		@
 else
 		@echo $(yellow)" NORMAL MODE $(EXEC)"$(reset)
 endif
@@ -80,7 +84,7 @@ endif
 clean	:
 ifneq ($(firstword $(MAKECMDGOALS)), fclean)
 ifneq ($(firstword $(MAKECMDGOALS)), re)
-		@make clean -C libft/
+		@make $@ -C libft/
 endif
 endif
 		@/bin/rm -f $(OBJS)
@@ -88,7 +92,7 @@ endif
 
 fclean	:	clean
 ifneq ($(firstword $(MAKECMDGOALS)), re)
-		@make fclean -C libft/
+		@make $@ -C libft/
 endif
 		@/bin/rm -f $(EXEC)
 		@echo $(red_dark)" Removing binary" $(grey)$(EXEC)$(reset)
