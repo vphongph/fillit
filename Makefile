@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/19 16:39:36 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/20 22:20:37 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ grey		=	"\033[38;5;242m"
 yellow		= 	"\033[38;5;178m"
 reset		= 	"\033[0m"
 
-EXEC		=	fillit
+NAME		=	fillit
 
 ifeq ($(DEBUG), yes)
 	CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
@@ -51,19 +51,19 @@ RUN_ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 .PHONY	:	all makeinclude clean fclean re run
 
-all		: makeinclude $(EXEC)
+all		: makeinclude $(NAME)
 ifeq ($(DEBUG), yes)
-		@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(EXEC)"\
+		@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"\
 		$(grey)"don't forget debug mode for libs"$(reset)
 endif
 
-$(EXEC)	: libft/libft.a $(OBJS)
-		@$(CC) $(CFLAGS) libft/libft.a $(OBJS) -o $(EXEC)
+$(NAME)	: libft/libft.a $(OBJS)
+		@$(CC) $(CFLAGS) libft/libft.a $(OBJS) -o $(NAME)
 		@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
 ifeq ($(DEBUG), yes)
 		@
 else
-		@echo $(yellow)" NORMAL MODE $(EXEC)"$(reset)
+		@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
 endif
 
 
@@ -88,14 +88,14 @@ ifneq ($(firstword $(MAKECMDGOALS)), re)
 endif
 endif
 		@/bin/rm -f $(OBJS)
-		@echo $(red_dark)" Removing objects from" $(grey)$(EXEC)$(reset)
+		@echo $(red_dark)" Removing objects from" $(grey)$(NAME)$(reset)
 
 fclean	:	clean
 ifneq ($(firstword $(MAKECMDGOALS)), re)
 		@make $@ -C libft/
 endif
-		@/bin/rm -f $(EXEC)
-		@echo $(red_dark)" Removing binary" $(grey)$(EXEC)$(reset)
+		@/bin/rm -f $(NAME)
+		@echo $(red_dark)" Removing binary" $(grey)$(NAME)$(reset)
 
 re		: fclean all
 
@@ -106,4 +106,4 @@ endif
 endif
 
 run		: all
-		./$(EXEC) $(RUN_ARGS)
+		./$(NAME) $(RUN_ARGS)

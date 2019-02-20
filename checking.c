@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 21:56:46 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/20 00:54:11 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/20 22:55:23 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ static int8_t	check_content(t_block block)
 	{
 		if (block.content[0][k] == '#' && ++nb)
 		{
-			if (k > 0 && block.content[0][k - 1] == '#')
+			if (k >= 1 && block.content[0][k - 1] == '#')
 				neighbor++;
-			if (k > 4 && block.content[0][k - 5] == '#')
+			if (k >= 5 && block.content[0][k - 5] == '#')
 				neighbor++;
 		}
 		else if ((k - 4) % 5 && block.content[0][k] != '.')
@@ -100,7 +100,6 @@ int16_t			check_main_read(int ac, char **av, t_block *block)
 {
 	int16_t ret;
 
-	// ret = 0;
 	if (ac != 2)
 	{
 		ft_putstr_fd_v2("usage : ./fillit [FILE] (in the valid format)\n", 1);

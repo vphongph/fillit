@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 22:16:10 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/20 00:41:36 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/20 22:56:55 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,9 @@ static void		delimit_setchar(t_block *block)
 	while (k <= 15)
 	{
 		if (!(k % 5) && !(detectsharp(*(int32_t *)&block->content[0][k])))
-			*(int32_t *)&block->content[0][k] = *(int32_t *)"----";
-			// *(int32_t *)&block->content[0][k] = 0;
+			*(int32_t *)&block->content[0][k] = 0;
 		if (block->content[0][k] == '#' && block->content[0][k + 1] == '.')
-			block->content[0][k + 1] = '*';
+			block->content[0][k + 1] = 0;
 		if (block->content[0][k] == '#')
 			block->content[0][k] = c;
 		k++;

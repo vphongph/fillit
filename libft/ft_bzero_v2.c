@@ -6,17 +6,31 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 18:34:10 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/06 15:59:27 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:22:02 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
+#include <stdio.h>
+
+/*
+** Possible aussi avec tableau[0] pour init
+** La déclaration est donc la suivante:
+** Quand on déclare partiellement la struc, tout le reste est à 0.
+** Possible de déclarer en ligne car c'est une constante
+** On déclare un tableau vide :
+** const t_64speed		speed64 = {.init = 0};
+** const t_512speed	speed512 = {.init = 0};
+**
+** Choix de la solution ci-dessus pour la norminette.
+** Sinon "may not compile or is invalid for some reasons." à tort.
+*/
 
 static void	ft_zero512(void **s, size_t *n)
 {
-	const t_64speed		speed64 = {.init = {}};
-	const t_512speed	speed512 = {.init = {}};
+	const t_64speed		speed64 = {.init = 0};
+	const t_512speed	speed512 = {.init = 0};
 
 	while (*n >> 9)
 	{
@@ -54,5 +68,3 @@ void		ft_bzero_v2(void *s, size_t n)
 		n--;
 	}
 }
-
-

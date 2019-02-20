@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/20 00:35:01 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/20 23:03:43 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,7 @@
 
 
 #include <stdio.h>
-
-
-
-/*
-** REMARQUES PERSO SUR CE PROJET
-** *(int *) Déréférencer cast int ==> Lire un int (de la taille de 4 octets)
-** à partir de l'adresse suivante.
-** *(int *)"...." = 2e2e2e2e
-** block->content[j] = &block->content[j][0]
-** printf("%08x") pour 8 bits en hexa avec le 0x
-** & 00, met tout à 0 donc pour ignorer
-** & ff, met tous les bits de 1 à 1, char à chercher.
-** __DARWIN_BYTE_ORDER = __DARWIN_LITTLE_ENDIAN ou mes tests
-** (voir brouillons fillit)
-**
-**
-** ATTENTION JE SUIS MALADE
-*/
+#include <unistd.h>
 
 /*
 ** RECOGNIZE BLOCK
@@ -54,27 +37,29 @@ int32_t	recognize_block(t_block block, int8_t i_block)
 	k = -1;
 	l = 0;
 	ft_bzero_v2(reco, sizeof(reco));
-	while (++k < 19)
+	while (++k <= 15)
 	{
 		if (block.content[0][k] == i_block + 'A')
 		{
-			if (k < 19 && block.content[0][k + 1] == i_block + 'A')
+			if (block.content[0][k + 1] == i_block + 'A')
 				reco[l++] = '3';
-			if (k != 0 && block.content[0][k - 1] == i_block + 'A')
+			if (k >= 1 && block.content[0][k - 1] == i_block + 'A')
 				reco[l++] = '1';
-			if (k < 14 && block.content[0][k + 5] == i_block + 'A')
+			if (k <= 10 && block.content[0][k + 5] == i_block + 'A')
 				reco[l++] = '4';
-			if (k > 4 && block.content[0][k - 5] == i_block + 'A')
+			if (k >= 5 && block.content[0][k - 5] == i_block + 'A')
 				reco[l++] = '2';
 		}
 	}
 	return (ft_atoi(reco));
 }
 
-void	parse_block(int16_t ret, t_block *block)
+int16_t	parse_block(int16_t ret, t_block *block)
 {
 	int8_t i;
 
+	write(1, block, ret);
+	write(1, "\n", 1);
 	i = -1;
 	if (check_block(ret, block))
 	{
@@ -85,16 +70,16 @@ void	parse_block(int16_t ret, t_block *block)
 	{
 		cut_block(&block[i]);
 	}
+	write(1, block, ret);
 	printf(PINK"nb block = %d\n"RESET, ret / 21 + 1);
+	return (ret);
 }
 
 int		main(int ac, char **av)
 {
 	t_block block[26];
 
-	// int32_t	order[27];
 	ft_bzero_v2(block, sizeof(block));
-	// ft_bzero_v2(order, sizeof(order));
 	parse_block(check_main_read(ac, av, block), block);
 	return (0);
 }
