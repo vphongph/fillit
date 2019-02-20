@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 22:16:10 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/16 18:50:26 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/20 00:41:36 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void			cut_block(t_block *block)
 	}
 	while ((*(int64_t *)block->content[0] & MASK_1STCOL)
 		== (*(int64_t *)".xxxx.xx" & MASK_1STCOL)
-			&& (*(int64_t *)block->content[2] & MASK_1STCOL)
-				== (*(int64_t *)".xxxx.xx" & MASK_1STCOL))
+		&& (*(int64_t *)block->content[2] & MASK_1STCOL)
+		== (*(int64_t *)".xxxx.xx" & MASK_1STCOL))
 	{
 		*(int32_t *)block->content[0] = *(int32_t *)block->content[0] >> 8;
 		*(int32_t *)block->content[1] = *(int32_t *)block->content[1] >> 8;

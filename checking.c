@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 21:56:46 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/17 03:56:20 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/20 00:54:11 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static int8_t	check_nl(t_block block)
 {
 	if ((*(int64_t *)&block.content[0][2] & MASK_NL)
 		== (*(int64_t *)"xx\nxxxx\n" & MASK_NL)
-			&& (*(int64_t *)&block.content[0][12] & MASK_NL)
-				== (*(int64_t *)"xx\nxxxx\n" & MASK_NL))
+		&& (*(int64_t *)&block.content[0][12] & MASK_NL)
+		== (*(int64_t *)"xx\nxxxx\n" & MASK_NL))
 		return (OK);
 	return (NOOK);
 }
