@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/20 18:25:10 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/22 00:46:20 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define Z_90	61
 # define S_0	70
 # define S_90	71
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <stdlib.h>
 
 typedef struct	s_block{
