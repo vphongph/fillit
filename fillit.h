@@ -34,27 +34,21 @@
 # define MASK_1STCOL	0xff00000000ff
 # define OK		0
 # define NOOK	1
-# define O_0	10
-# define I_0	20
-# define I_90	21
-# define T_0	30
-# define T_90	31
-# define T_180	32
-# define T_270	33
-# define L_0 	40
-# define L_90	41
-# define L_180	42
-# define L_270	43
-# define J_0 	50
-# define J_90 	51
-# define J_180	52
-# define J_270	53
-# define Z_0	60
-# define Z_90	61
-# define S_0	70
-# define S_90	71
 # include "libft/libft.h"
 # include <stdlib.h>
+
+enum e_bool
+{
+	t_true = 1,
+	t_false = 0
+};
+
+enum e_cardinal{
+	t_west = '1',
+	t_north = '2',
+	t_east = '3',
+	t_south = '4'
+};
 
 typedef struct	s_block{
 
@@ -62,8 +56,21 @@ typedef struct	s_block{
 	char	sep;
 }				t_block;
 
+typedef struct	s_coords
+{
+	int	x;
+	int	y;
+}				t_coords;
+
+typedef struct	s_map
+{
+	char	content[16][16];
+	int8_t	size;
+}				t_map;
+
 int8_t			check_block(int16_t ret, t_block *block);
 int16_t			check_main_read(int ac, char **av, t_block *block);
 void			cut_block(t_block *block);
+int				ft_sqrt(int nb);
 
 #endif
