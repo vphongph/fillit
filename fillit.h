@@ -64,13 +64,15 @@ typedef struct	s_coords
 
 typedef struct	s_map
 {
-	char	content[16][16];
-	int8_t	size;
+	char		content[16][16];
+	int8_t		size;
+	t_coords	coords;
 }				t_map;
 
 int8_t			check_block(int16_t ret, t_block *block);
 int16_t			check_main_read(int ac, char **av, t_block *block);
 void			cut_block(t_block *block);
 int				ft_sqrt(int nb);
+void			solver(int16_t nb_tetros, t_block *blocks);
 
 #endif

@@ -36,7 +36,8 @@ INCLUDED	=	libft.a
 SRCS		=	fillit.c		\
 				checking.c		\
 				cutting.c		\
-				ft_sqrt.c
+				ft_sqrt.c		\
+				solver.c
 
 DIR_OBJS	=	object
 
