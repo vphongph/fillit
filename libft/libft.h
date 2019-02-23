@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 13:26:35 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/22 00:46:21 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/23 20:33:31 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define FEDERATION	"\e[38;2;65;128;219m"
 # define ASSEMBLY	"\e[38;2;160;97;209m"
 # define ORDER		"\e[38;2;255;105;80m"
+# define BLINK		"\033[5:m"
 # define RESET		"\e[0m"
 # include <string.h>
 
