@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/22 00:43:09 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/22 22:44:13 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,13 +95,13 @@ endif
 				@echo $(green_dark)"  Compiling" $(grey)$< $(green_dark)\
 				"->" $(grey)"$@"$(reset)
 
-
 clean			:
 ifneq ($(firstword $(MAKECMDGOALS)), fclean)
 ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@make $@ -C $(LIB_PATH)
 endif
 endif
+				@`$(VAR)`
 				@/bin/rm -f $(OBJS)
 				@echo $(red_dark)" Removing objects from" $(grey)$(NAME)$(reset)
 
@@ -127,9 +127,16 @@ endif
 run				:	all
 				./$(NAME) $(RUN_ARGS)
 
+# A creuser avec la boucle ci dessous + foreach
+#define CLEAN_LIB__TEMPLATE
+#	@make -C $(1) $@
+#endef
 
 #Boucle dans le makefile, mais il faut un tableau, à creuser
 #@	i=1 ; while [[ $$i -le 1 ]] ; do	\
 #	make re -C libft/;					\
 #	i+=+1;								\
 #	done
+
+
+

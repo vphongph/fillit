@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/22 04:52:38 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/23 01:13:26 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,53 @@ int64_t	detectchar(int64_t mem, int8_t memsize, char c)
 	}
 
 
-	printf("%#.8llx\n", diff_c);
-	printf("%#.8llx\n", mem);
-	printf("%#.8llx\n", diff_zero);
-	printf("%#.8llx\n", and_mem);
-
-
 	mem = ~(mem - diff_c) & ~mem;
 	return ((mem - diff_zero) & ~mem & and_mem);
 }
 
 static int32_t	detectsharp(int32_t c)
 {
-	c = (c + 0xDBDBDBDB);
-	printf("%#.8x\n", c);
-	return (c & 0x80808080);
+	c = ~(c - 0x24242424) & ~c;
+	return ((c - 0x01010101) & ~c & 0x80808080);
 }
+
+// static int32_t	detectsharp(void)
+// {
+// 	int chhar1;
+// 	int chhar2;
+// 	int result;
+
+// 	int chhar_origin						= 0x24242424;
+// 	int zero 								= 0x00000000;
+
+// 	chhar1 	= chhar_origin					- 0x23232323;
+// 	chhar2 	= ~(chhar_origin 				- 0x22222222);
+
+
+// 	printf("c1 : %#.8x\n", chhar1);
+// 	printf("c2 : %#.8x\n", chhar2);
+
+// 	chhar1 	= (chhar1 & ~chhar_origin);
+// 	chhar2 	= (chhar2 & ~chhar_origin);
+
+// 	printf("c1 : %#.8x\n", chhar1);
+// 	printf("c2 : %#.8x\n", chhar2);
+
+// 	chhar1 	= chhar1 & 0x80808080;
+// 	chhar2 	= chhar2 & 0x80808080;
+
+// 	result = chhar1 & chhar2;
+
+// 	printf(ALLIANCE"c1 : %#.8x\n", chhar1);
+// 	printf("c2 : %#.8x\n", chhar2);
+// 	printf(ORDER"zero : %#.8x\n", (zero - 0x01010101) & ~zero & 0x80808080);
+
+
+// 	printf(YELLOW"\n%#.8x\n"RESET, result);
+
+
+// 	return (0);
+// }
 
 
 int		main(void)
@@ -67,9 +98,7 @@ int		main(void)
 	// t_block *tetri = (t_block *)malloc(sizeof(t_block) * 1);
 	// printf("%lu\n", malloc_size(tetri));
 	ft_bzero_v2(tetri, sizeof(t_block));
-
-	printf("detect char : %#.8llx\n", detectchar(0x2b000000	, 4, '*'));
-	printf("detect sharp: %#.8x\n", detectsharp(0x00000000));
+	printf("result %#.8x\n",detectsharp(*(int32_t *)"..\0#"));
 
 	return (0);
 }
