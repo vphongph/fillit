@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/22 00:46:20 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/24 04:09:24 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ typedef struct	s_block{
 	char	content[4][5];
 	char	sep;
 }				t_block;
+
+typedef struct	s_map{
+
+	int8_t	nb_block;
+	int8_t	map_size;
+	char	content[16][16];
+}				t_map;
+
 
 int8_t			check_block(int16_t ret, t_block *block);
 int16_t			check_main_read(int ac, char **av, t_block *block);

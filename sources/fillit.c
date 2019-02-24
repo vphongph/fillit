@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/22 22:38:12 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/24 01:52:23 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ int16_t	parse_block(int16_t ret, t_block *block)
 {
 	int8_t i;
 
-	write(1, block, ret);
-	write(1, "\n", 1);
+	// write(1, block, ret);
+	// write(1, "\n", 1);
 	i = -1;
 	if (check_block(ret, block))
 	{
@@ -70,16 +70,83 @@ int16_t	parse_block(int16_t ret, t_block *block)
 	{
 		cut_block(&block[i]);
 	}
-	write(1, block, ret);
+	// write(1, block, ret);
 	printf(PINK"nb block = %d\n"RESET, ret / 21 + 1);
 	return (ret);
+}
+
+int8_t	ft_sqrt(int8_t nb_block)
+{
+	int i = 2;
+	while (i * i < nb_block * 4)
+		i++;
+	return (i);
+}
+
+int8_t	place_block(t_block *block, t_map *map)
+{
+
+	(void)map;
+	(void)block;
+
+
+
+
+	return (0);
+}
+
+int8_t	solver(t_map *map, t_block *block)
+{
+	(void)block;
+	(void)map;
+
+	place_block(block, map);
+
+	return (0);
+}
+
+void	initialize_map(t_map* map, int16_t ret)
+{
+	map[0].content[0][0] = 'a';
+	map[0].content[0][1] = '\n';
+	map[0].content[15][14] = 'z';
+	map[0].content[15][15] = '\n';
+
+	(void)ret;
+	// printf("%ld\n", sizeof(map[0]));
+
+	// map[0].nb_block = '8';
+	printf("%d\n",map[0].nb_block = ret / 21 + 1);
+	// map[0].map_size = '9';
+	printf("%d\n",map[0].map_size = ft_sqrt(map[0].nb_block));
+	ft_bzero_v2(map[0].content, sizeof (map[0].content));
+	map[1] = map[0];
+
+	printf("%d\n",map[1].nb_block = ret / 21 + 1);
+	printf("%d\n",map[1].map_size = ft_sqrt(map[1].nb_block));
+
+	printf("%d\n",map[0].nb_block = 42);
+	printf("%d\n",map[1].nb_block);
+
+
 }
 
 int		main(int ac, char **av)
 {
 	t_block block[26];
+	t_map map[2];
 
 	ft_bzero_v2(block, sizeof(block));
-	parse_block(check_main_read(ac, av, block), block);
+	ft_bzero_v2(map, sizeof(map));
+
+	initialize_map(map, parse_block(check_main_read(ac, av, block), block));
+	solver(map, block);
+
+	// write(1, &map[0], map[0].map_size * map[0].map_size);
+
 	return (0);
 }
+
+
+
+

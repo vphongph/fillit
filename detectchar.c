@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   random_test.c                                      :+:      :+:    :+:   */
+/*   detectchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/23 21:48:58 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/24 01:50:04 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int		main(void)
 	t_block tetri[1];
 	ft_bzero_v2(tetri, sizeof(t_block));
 
-	printf(YELLOW"%#.16llx\n"RESET,detectchar(*(int64_t *)"...i....", 8, 'i'));
+	printf(YELLOW"%#.16llx\n"RESET,detectchar(*(int64_t *)"a.......", 8, 'a'));
 										//    0xZZZZZZZZZZZZZZZZ
 	return (0);
 }

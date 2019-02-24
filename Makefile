@@ -6,14 +6,16 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/22 22:44:13 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/24 04:30:56 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 blink		= 	"\033[5:m"
+blue		= 	"\033[38;5;26m"
 purple_dark	= 	"\033[38;5;62m"
 purple		= 	"\033[38;5;98m"
 green		= 	"\033[38;5;70m"
+green_coa	= 	"\033[38;5;47m"
 green_dark	= 	"\033[38;5;28m"
 red			= 	"\033[38;5;196m"
 red_dark	= 	"\033[38;5;88m"
@@ -68,6 +70,42 @@ ifeq ($(DEBUG), yes)
 				@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"\
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
+					@printf $(blue)"\
+				      ____________ \n\
+				     /\  ________ \ \n\
+				    /  \ \______/\ \ "$(yellow)"FILLIT"$(blue)"\n\
+				   / /\ \ \  / /\ \ \ "$(green_coa)"vphongph"$(blue)"\n\
+				  / / /\ \ \/ / /\ \ \ "$(purple)"mtorsell"$(blue)"\n\
+				 / / /__\ \ \/_/__\_\ \__________ \n\
+				/ /_/____\ \__________  ________ \ \n\
+				\ \ \____/ / ________/\ \______/\ \ \n\
+				 \ \ \  / / /"$(red_dark)$(blink)"\ \  / /"$(reset)$(blue)"\ \ \  / /\ \ \ \n\
+				  \ \ \/ / /"$(red_dark)$(blink)"\ \ \/ / /"$(reset)$(blue)"\ \ \/ / /\ \ \ \n\
+				   \ \/ / /"$(red_dark)$(blink)"__\_\/ / /__"$(reset)$(blue)"\ \ \/_/__\_\ \ \n\
+				    \  /_/"$(red_dark)$(blink)"______\/_/____"$(reset)$(blue)"\ \___________\ \n\
+				    /  \ "
+				    @printf \\
+				    @printf $(red_dark)$(blink)"______/\ \____"$(reset)$(blue)"/ / ________  / \n\
+				   / /\ \ "
+				   	@printf \\
+				   	@printf $(red_dark)$(blink)"  / /\ \ \  "$(reset)$(blue)"/ / /\ \  / / / \n\
+				  / / /\ \ "
+				  	@printf \\
+				  	@printf $(red_dark)$(blink)"/ / /\ \ "
+				  	@printf \\
+				  	@printf $(reset)$(blue)"/ / /\ \ \/ / / \n\
+				 / / /__\ \ "
+				 	@printf \\
+				 	@printf $(red_dark)$(blink)"/_/__\_"
+				 	@printf \\
+				 	@printf $(reset)$(blue)"/ / /__\_\/ / / \n\
+				/ /_/____\ \_________\/ /______\/ / \n\
+				\ \ \____/ / ________  __________/ \n\
+				 \ \ \  / / /\ \  / / / \n\
+				  \ \ \/ / /\ \ \/ / / \n\
+				   \ \/ / /__\_\/ / / \n\
+				    \  / /______\/ / \n\
+				     \/___________/ \n"
 
 
 $(NAME)			:	$(LIBS) $(OBJS)
