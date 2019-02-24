@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/24 19:33:26 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/24 23:07:39 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ int8_t	parse_block(int16_t ret, t_block *block)
 	{
 		cut_block(&block[i]);
 	}
-	write(1, block, ret);
-	printf(PINK"nb block = %d\n"RESET, nb_tetros);
+	// write(1, block, ret);
+	// printf(PINK"nb block = %d\n"RESET, nb_tetros);
 	return (nb_tetros);
 }
 
@@ -133,13 +133,13 @@ void	initialize_map_victor(t_map_victor* map_victor, int16_t ret)
 int		main(int ac, char **av)
 {
 	t_block block[26];
-	t_map_victor map_victor[2];
+	// t_map_victor map_victor[2];
 
 	ft_bzero_v2(block, sizeof(block));
-	ft_bzero_v2(map_victor, sizeof(map_victor));
+	// ft_bzero_v2(map_victor, sizeof(map_victor));
 
-	initialize_map_victor(map_victor, parse_block(check_main_read(ac, av, block), block));
-	solver_victor(map_victor, block);
+	// initialize_map_victor(map_victor, parse_block(check_main_read(ac, av, block), block));
+	// solver_victor(map_victor, block);
 
 	// write(1, &map[0], map[0].map_size * map[0].map_size);
 

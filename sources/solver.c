@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 19:53:37 by mtorsell          #+#    #+#             */
-/*   Updated: 2019/02/24 19:54:33 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/24 23:05:57 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int8_t	ft_sqrt(int8_t area_mini)
 	return (i);
 }
 
-void	print_map(t_map map) {
+void	print_map(t_map map)
+{
+	int	i;
 	int y;
 
-	y = 0;
-	int	i;
-
 	i = 0;
+	y = 0;
 	while (i < map.size * map.size)
 	{
 		if (map.content[i / map.size][i % map.size] == 0)
@@ -269,7 +269,8 @@ int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros)
 	return (0);
 }
 
-void	solver(int16_t nb_tetros, t_block *blocks) {
+void	solver(int16_t nb_tetros, t_block *blocks)
+{
 	int i;
 	t_map map;
 
@@ -277,8 +278,16 @@ void	solver(int16_t nb_tetros, t_block *blocks) {
 	map.size = ft_sqrt(nb_tetros * 4);
 	while (is_solved(&map, blocks, nb_tetros) != 1)
 		map.size++;
-	printf("%c\n", map.content[1][2]);
-	printf("mapsize = %d\n", map.size);
+	// printf("%c\n", map.content[1][2]);
+	// printf("mapsize = %d\n", map.size);
 	print_map(map);
 	exit(EXIT_SUCCESS);
 }
+
+
+
+
+
+
+
+
