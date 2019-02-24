@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/24 01:52:23 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/24 19:33:26 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,41 +41,43 @@ int32_t	recognize_block(t_block block, int8_t i_block)
 	{
 		if (block.content[0][k] == i_block + 'A')
 		{
-			if (block.content[0][k + 1] == i_block + 'A')
-				reco[l++] = '3';
-			if (k >= 1 && block.content[0][k - 1] == i_block + 'A')
-				reco[l++] = '1';
-			if (k <= 10 && block.content[0][k + 5] == i_block + 'A')
-				reco[l++] = '4';
-			if (k >= 5 && block.content[0][k - 5] == i_block + 'A')
-				reco[l++] = '2';
+			if (k < 19 && block.content[0][k + 1] == i_block + 'A')
+				reco[l++] = t_east;
+			if (k != 0 && block.content[0][k - 1] == i_block + 'A')
+				reco[l++] = t_west;
+			if (k < 14 && block.content[0][k + 5] == i_block + 'A')
+				reco[l++] = t_south;
+			if (k > 4 && block.content[0][k - 5] == i_block + 'A')
+				reco[l++] = t_north;
 		}
 	}
 	return (ft_atoi(reco));
 }
 
-int16_t	parse_block(int16_t ret, t_block *block)
+int8_t	parse_block(int16_t ret, t_block *block)
 {
 	int8_t i;
+	int8_t nb_tetros;
 
 	// write(1, block, ret);
 	// write(1, "\n", 1);
 	i = -1;
+	nb_tetros = (ret / 21) + 1;
 	if (check_block(ret, block))
 	{
 		ft_putstr_fd_v2("error\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	while (++i < ((ret / 21) + 1))
+	while (++i < nb_tetros)
 	{
 		cut_block(&block[i]);
 	}
-	// write(1, block, ret);
-	printf(PINK"nb block = %d\n"RESET, ret / 21 + 1);
-	return (ret);
+	write(1, block, ret);
+	printf(PINK"nb block = %d\n"RESET, nb_tetros);
+	return (nb_tetros);
 }
 
-int8_t	ft_sqrt(int8_t nb_block)
+int8_t	ft_sqrt_victor(int8_t nb_block)
 {
 	int i = 2;
 	while (i * i < nb_block * 4)
@@ -83,50 +85,47 @@ int8_t	ft_sqrt(int8_t nb_block)
 	return (i);
 }
 
-int8_t	place_block(t_block *block, t_map *map)
+int8_t	place_block_victor(t_block *block, t_map_victor *map_victor)
 {
 
-	(void)map;
+	(void)map_victor;
 	(void)block;
-
-
-
 
 	return (0);
 }
 
-int8_t	solver(t_map *map, t_block *block)
+int8_t	solver_victor(t_map_victor *map_victor, t_block *block)
 {
 	(void)block;
-	(void)map;
+	(void)map_victor;
 
-	place_block(block, map);
+	place_block_victor(block, map_victor);
 
 	return (0);
 }
 
-void	initialize_map(t_map* map, int16_t ret)
+void	initialize_map_victor(t_map_victor* map_victor, int16_t ret)
 {
-	map[0].content[0][0] = 'a';
-	map[0].content[0][1] = '\n';
-	map[0].content[15][14] = 'z';
-	map[0].content[15][15] = '\n';
+	map_victor[0].content[0][0] = 'a';
+	map_victor[0].content[0][1] = '\n';
+	map_victor[0].content[15][14] = 'z';
+	map_victor[0].content[15][15] = '\n';
 
 	(void)ret;
-	// printf("%ld\n", sizeof(map[0]));
+	// printf("%ld\n", sizeof(map_victor[0]));
 
-	// map[0].nb_block = '8';
-	printf("%d\n",map[0].nb_block = ret / 21 + 1);
-	// map[0].map_size = '9';
-	printf("%d\n",map[0].map_size = ft_sqrt(map[0].nb_block));
-	ft_bzero_v2(map[0].content, sizeof (map[0].content));
-	map[1] = map[0];
+	// map_victor[0].nb_block = '8';
+	printf("%d\n",map_victor[0].nb_block = ret / 21 + 1);
+	// map_victor[0].map_victor_size = '9';
+	printf("%d\n",map_victor[0].map_size = ft_sqrt_victor(map_victor[0].nb_block));
+	ft_bzero_v2(map_victor[0].content, sizeof (map_victor[0].content));
+	map_victor[1] = map_victor[0];
 
-	printf("%d\n",map[1].nb_block = ret / 21 + 1);
-	printf("%d\n",map[1].map_size = ft_sqrt(map[1].nb_block));
+	printf("%d\n",map_victor[1].nb_block = ret / 21 + 1);
+	printf("%d\n",map_victor[1].map_size = ft_sqrt_victor(map_victor[1].nb_block));
 
-	printf("%d\n",map[0].nb_block = 42);
-	printf("%d\n",map[1].nb_block);
+	printf("%d\n",map_victor[0].nb_block = 42);
+	printf("%d\n",map_victor[1].nb_block);
 
 
 }
@@ -134,19 +133,17 @@ void	initialize_map(t_map* map, int16_t ret)
 int		main(int ac, char **av)
 {
 	t_block block[26];
-	t_map map[2];
+	t_map_victor map_victor[2];
 
 	ft_bzero_v2(block, sizeof(block));
-	ft_bzero_v2(map, sizeof(map));
+	ft_bzero_v2(map_victor, sizeof(map_victor));
 
-	initialize_map(map, parse_block(check_main_read(ac, av, block), block));
-	solver(map, block);
+	initialize_map_victor(map_victor, parse_block(check_main_read(ac, av, block), block));
+	solver_victor(map_victor, block);
 
 	// write(1, &map[0], map[0].map_size * map[0].map_size);
 
+	solver(parse_block(check_main_read(ac, av, block), block), block);
 	return (0);
 }
-
-
-
 

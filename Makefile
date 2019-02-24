@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/24 05:17:02 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/24 19:47:55 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ endif
 
 SRC_NAMES	=	fillit.c		\
 				checking.c		\
-				cutting.c
+				cutting.c		\
+				solver.c
 
 SRC_PATH	=	sources/
 
