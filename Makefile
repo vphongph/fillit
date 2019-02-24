@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/24 23:11:09 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/25 00:53:21 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ RUN_ARGS	=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 .PHONY			:	all makeinclude clean fclean re run
 
 
-all				:	makelibs $(NAME)
+all				:	$(NAME)
 ifeq ($(DEBUG), yes)
 				@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"\
 				$(grey)"don't forget debug mode for libs"$(reset)
@@ -111,7 +111,7 @@ endif
 #				     \/___________/ \n"$(reset)
 
 
-$(NAME)			:	$(LIBS) $(OBJS)
+$(NAME)			:	makelibs $(LIBS) $(OBJS)
 				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
 				@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
 ifneq ($(DEBUG), yes)
@@ -142,8 +142,8 @@ ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@make $@ -C $(LIB_PATH)
 endif
 endif
-				@`$(VAR)`
 				@/bin/rm -f $(OBJS)
+				@rmdir $(OBJ_PATH) 2>/dev/null || true
 				@echo $(red_dark)" Removing objects from" $(grey)$(NAME)$(reset)
 
 
