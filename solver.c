@@ -91,6 +91,23 @@ int		try_tetro(t_block block, t_map map)
 	return (0);
 }
 
+void	sanitize_map(t_map *map)
+{
+	int	i;
+	int x;
+	int y;
+
+	i = 0;
+	while (i < map->size * map->size)
+	{
+		y = i / map->size;
+		x = i % map->size;
+		if (map->content[y][x] == '.' || map->content[y][x] == '\n')
+			map->content[i / map->size][i % map->size] = 0;
+		i++;
+	}
+}
+
 void	write_tetro(t_block block, t_map *map)
 {
 	t_coords swap;
@@ -113,6 +130,7 @@ void	write_tetro(t_block block, t_map *map)
 		coords.x = coords.x - (swap.x - tetro_coords.x);
 		coords.y = coords.y - (swap.y - tetro_coords.y);
 	}
+	sanitize_map(map);
 }
 
 t_coords	find_next_empty(t_map map)
@@ -155,23 +173,6 @@ t_coords	find_tetro(t_map map, char id)
 	return (coords);
 }
 
-void	sanitize_map(t_map *map)
-{
-	int	i;
-	int x;
-	int y;
-
-	i = 0;
-	while (i < map->size * map->size)
-	{
-		y = i / map->size;
-		x = i % map->size;
-		if (map->content[y][x] == '.' || map->content[y][x] == '\n')
-			map->content[i / map->size][i % map->size] = 0;
-		i++;
-	}
-}
-
 void	delete_tetro(t_map *map, char id)
 {
 	int	i;
@@ -189,9 +190,37 @@ void	delete_tetro(t_map *map, char id)
 	}
 }
 
-int		solver_recurse(t_map *map, t_block *blocks, int16_t nb_tetros, int8_t tetros_placed)
+int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 {
-	sanitize_map(map);
+	int8_t tetros_placed;
+
+	tetros_placed = 0;
+	while (tetros_placed < nb_tetros)
+	{
+		map->coords = find_next_empty(*map);
+		if (map->coords.y < map->size && try_tetro(blocks[tetros_placed], *map))
+		{
+			write_tetro(blocks[tetros_placed++], map);
+			map->coords.x = -1;
+			map->coords.y = 0;
+		}
+		else
+		{
+			if (map->coords.x >= map->size && map->coords.y >= map->size)
+			{
+				tetros_placed--;
+				if (tetros_placed == 0)
+					return (0);
+				map->coords = find_tetro(*map, 'A' + tetros_placed);
+				delete_tetro(map, 'A' + tetros_placed);
+			}
+		}
+	}
+	return (1);
+}
+
+/*int		solver_recurse(t_map *map, t_block *blocks, int16_t nb_tetros, int8_t tetros_placed)
+{
 	map->coords = find_next_empty(*map);
 	if (map->coords.y < map->size && try_tetro(blocks[tetros_placed], *map))
 	{
@@ -214,15 +243,19 @@ int		solver_recurse(t_map *map, t_block *blocks, int16_t nb_tetros, int8_t tetro
 		}
 	}
 	return (solver_recurse(map, blocks, nb_tetros, tetros_placed));
-}
+}*/
 
 int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros)
 {
+	ft_bzero_v2(map->content, 16 * 16);
 	map->coords.x = -1;
 	map->coords.y = 0;
-	ft_bzero_v2(map->content, 16 * 16);
-	if (solver_recurse(map, blocks, nb_tetros, 0))
+	if (solver_iter(map, blocks, nb_tetros))
 		return (1);
+//	map->coords.x = -1;
+//	map->coords.y = 0;
+//	if (solver_recurse(map, blocks, nb_tetros, 0))
+//		return (1);
 	return (0);
 }
 
