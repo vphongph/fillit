@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/25 18:10:47 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/25 19:07:29 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,6 @@ int		main(int ac, char **av)
 	// solver_victor(map_victor, block);
 
 	// write(1, &map[0], map[0].map_size * map[0].map_size);
-
-	printf("%ld\n", sizeof(t_block));
-	printf("%ld\n", sizeof(t_coords));
-	printf("%ld\n", sizeof(t_map));
 
 	solver(parse_block(check_main_read(ac, av, block), block), block);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 19:53:37 by mtorsell          #+#    #+#             */
-/*   Updated: 2019/02/25 18:12:58 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/25 19:07:15 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 			if (map->coords.x >= map->size && map->coords.y >= map->size)
 			{
 				tetros_placed--;
-				if (tetros_placed == 0)
+				if (tetros_placed <= 0)
 					return (0);
 				map->coords = find_tetro(*map, 'A' + tetros_placed);
 				delete_tetro(map, 'A' + tetros_placed);
