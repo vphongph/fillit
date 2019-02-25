@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 21:56:46 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/22 00:42:51 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/25 20:17:59 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,23 +99,24 @@ int8_t			check_block(int16_t ret, t_block *block)
 int16_t			check_main_read(int ac, char **av, t_block *block)
 {
 	int16_t ret;
+	int8_t	fd;
 
 	if (ac != 2)
 	{
 		ft_putstr_fd_v2("usage : ./fillit [FILE] (in the valid format)\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	if (open(av[1], O_RDONLY) == -1)
+	if ((fd = open(av[1], O_RDONLY)) == -1)
 	{
 		ft_putstr_fd_v2("error\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	if ((ret = read(3, block, BUFF_SIZE + 1)) == -1)
+	if ((ret = read(fd, block, BUFF_SIZE + 1)) == -1)
 	{
 		ft_putstr_fd_v2("error\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	if (close(3) == -1)
+	if (close(fd) == -1)
 	{
 		ft_putstr_fd_v2("error\n", 1);
 		exit(EXIT_FAILURE);
