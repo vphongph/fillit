@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/25 00:53:21 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/25 02:20:28 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,52 +66,57 @@ RUN_ARGS	=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 .PHONY			:	all makeinclude clean fclean re run
 
 
-all				:	$(NAME)
+all				:	makeinclude	$(NAME)
 ifeq ($(DEBUG), yes)
 				@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"\
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
-#					@printf $(blue)"\
-#				      ____________ \n\
-#				     /\  ________ \ \n\
-#				    /  \ \______/\ \ "$(yellow)"FILLIT"$(blue)"\n\
-#				   / /\ \ \  / /\ \ \ "$(green_coa)"vphongph"$(blue)"\n\
-#				  / / /\ \ \/ / /\ \ \ "$(purple)"mtorsell"$(blue)"\n\
-#				 / / /__\ \ \/_/__\_\ \__________ \n\
-#				/ /_/____\ \__________  ________ \ \n\
-#				\ \ \____/ / ________/\ \______/\ \ \n\
-#				 \ \ \  / / /"$(red_dark)$(blink)"\ \  / /"$(reset)$(blue)"\ \ \  / /\ \ \ \n\
-#				  \ \ \/ / /"$(red_dark)$(blink)"\ \ \/ / /"$(reset)$(blue)"\ \ \/ / /\ \ \ \n\
-#				   \ \/ / /"$(red_dark)$(blink)"__\_\/ / /__"$(reset)$(blue)"\ \ \/_/__\_\ \ \n\
-#				    \  /_/"$(red_dark)$(blink)"______\/_/____"$(reset)$(blue)"\ \___________\ \n\
-#				    /  \ "
-#				    @printf \\
-#				    @printf $(red_dark)$(blink)"______/\ \____"$(reset)$(blue)"/ / ________  / \n\
-#				   / /\ \ "
-#				   	@printf \\
-#				   	@printf $(red_dark)$(blink)"  / /\ \ \  "$(reset)$(blue)"/ / /\ \  / / / \n\
-#				  / / /\ \ "
-#				  	@printf \\
-#				  	@printf $(red_dark)$(blink)"/ / /\ \ "
-#				  	@printf \\
-#				  	@printf $(reset)$(blue)"/ / /\ \ \/ / / \n\
-#				 / / /__\ \ "
-#				 	@printf \\
-#				 	@printf $(red_dark)$(blink)"/"$(reset)$(blue)"_"$(red_dark)$(blink)"/"$(reset)$(blue)"__"
-#				 	@printf $(red_dark)$(blink)\\
-#				 	@printf $(reset)$(blue)"_"
-#				 	@printf $(red_dark)$(blink)\\
-#				 	@printf $(reset)$(blue)"/ / /__\_\/ / / \n\
-#				/ /_/____\ \_________\/ /______\/ / \n\
-#				\ \ \____/ / ________  __________/ \n\
-#				 \ \ \  / / /\ \  / / / \n\
-#				  \ \ \/ / /\ \ \/ / / \n\
-#				   \ \/ / /__\_\/ / / \n\
-#				    \  / /______\/ / \n\
-#				     \/___________/ \n"$(reset)
+					@printf $(blue)"\
+				      ____________ \n\
+				     /\  ________ \ \n\
+				    /  \ \______/\ \ "$(yellow)"FILLIT"$(blue)"\n\
+				   / /\ \ \  / /\ \ \ "$(green_coa)"vphongph"$(blue)"\n\
+				  / / /\ \ \/ / /\ \ \ "$(purple)"mtorsell"$(blue)"\n\
+				 / / /__\ \ \/_/__\_\ \__________ \n\
+				/ /_/____\ \__________  ________ \ \n\
+				\ \ \____/ / ________/\ \______/\ \ \n\
+				 \ \ \  / / /"$(red_dark)$(blink)"\ \  / /"$(reset)$(blue)"\ \ \  / /\ \ \ \n\
+				  \ \ \/ / /"$(red_dark)$(blink)"\ \ \/ / /"$(reset)$(blue)"\ \ \/ / /\ \ \ \n\
+				   \ \/ / /"$(red_dark)$(blink)"__\_\/ / /__"$(reset)$(blue)"\ \ \/_/__\_\ \ \n\
+				    \  /_/"$(red_dark)$(blink)"______\/_/____"$(reset)$(blue)"\ \___________\ \n\
+				    /  \ "
+				    @printf \\
+				    @printf $(red_dark)$(blink)"______/\ \____"$(reset)$(blue)"/ / ________  / \n\
+				   / /\ \ "
+				   	@printf \\
+				   	@printf $(red_dark)$(blink)"  / /\ \ \  "$(reset)$(blue)"/ / /\ \  / / / \n\
+				  / / /\ \ "
+				  	@printf \\
+				  	@printf $(red_dark)$(blink)"/ / /\ \ "
+				  	@printf \\
+				  	@printf $(reset)$(blue)"/ / /\ \ \/ / / \n\
+				 / / /__\ \ "
+				 	@printf \\
+				 	@printf $(red_dark)$(blink)"/"$(reset)$(blue)"_"$(red_dark)$(blink)"/"$(reset)$(blue)"__"
+				 	@printf $(red_dark)$(blink)\\
+				 	@printf $(reset)$(blue)"_"
+				 	@printf $(red_dark)$(blink)\\
+				 	@printf $(reset)$(blue)"/ / /__\_\/ / / \n\
+				/ /_/____\ \_________\/ /______\/ / \n\
+				\ \ \____/ / ________  __________/ \n\
+				 \ \ \  / / /\ \  / / / \n\
+				  \ \ \/ / /\ \ \/ / / \n\
+				   \ \/ / /__\_\/ / / \n\
+				    \  / /______\/ / \n\
+				     \/___________/ \n"$(reset)
 
 
-$(NAME)			:	makelibs $(LIBS) $(OBJS)
+$(NAME)			:	$(LIBS) $(OBJS)
+#ifeq ($(firstword $(MAKECMDGOALS)), re)
+#d				@make re -C $(LIB_PATH)
+#else
+#				@make -C $(LIB_PATH)
+#endif
 				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
 				@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
 ifneq ($(DEBUG), yes)
@@ -119,7 +124,7 @@ ifneq ($(DEBUG), yes)
 endif
 
 
-makelibs		:
+makeinclude		:
 ifeq ($(firstword $(MAKECMDGOALS)), re)
 				@make re -C $(LIB_PATH)
 else
@@ -152,10 +157,11 @@ ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@make $@ -C $(LIB_PATH)
 endif
 				@/bin/rm -f $(NAME)
-				@echo $(red_dark)" Removing binary" $(grey)$(NAME)$(reset)
+	 			@echo $(red_dark)" Removing binary" $(grey)$(NAME)$(reset)
 
 
 re				:	fclean all
+#				@make re -C $(LIB_PATH)
 
 
 ifeq ($(firstword $(MAKECMDGOALS)), run)
@@ -178,6 +184,5 @@ run				:	all
 #	make re -C libft/;					\
 #	i+=+1;								\
 #	done
-
 
 

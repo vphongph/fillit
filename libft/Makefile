@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/24 02:12:35 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/25 01:19:44 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,10 +50,10 @@ OBJS		=	$(SRCS:.c=.o)
 HDRS		=	libft.h
 
 
-.PHONY	:	all clean fclean re
+.PHONY	:	alol clean fclean re
 
 
-all		:	$(NAME)
+all	:	$(NAME)
 
 
 $(NAME)	:	$(OBJS)
