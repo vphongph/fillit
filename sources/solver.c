@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 19:53:37 by mtorsell          #+#    #+#             */
-/*   Updated: 2019/02/24 23:05:57 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/25 18:12:58 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,11 +283,5 @@ void	solver(int16_t nb_tetros, t_block *blocks)
 	print_map(map);
 	exit(EXIT_SUCCESS);
 }
-
-
-
-
-
-
 
 

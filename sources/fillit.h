@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/25 02:04:27 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/25 18:11:24 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ typedef struct	s_coords
 
 typedef struct	s_map
 {
-	char		content[16][16];
-	int8_t		size;
+	int			size;
 	t_coords	coords;
+	char		content[16][16];
 }				t_map;
 
 int8_t			check_block(int16_t ret, t_block *block);
