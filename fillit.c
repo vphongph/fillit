@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:09:39 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/26 02:39:15 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/26 06:04:43 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ int		main(int ac, char **av)
 	t_block block[26];
 
 	ft_bzero_v2(block, sizeof(block));
-	solver(parse_block(check_main_read(ac, av, block), block), block);
+	solve(parse_block(check_main_read(ac, av, block), block), block);
 	return (0);
 }

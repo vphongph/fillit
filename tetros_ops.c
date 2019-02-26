@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tetros_ops.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtorsell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 02:45:29 by mtorsell          #+#    #+#             */
-/*   Updated: 2019/02/26 02:45:33 by mtorsell         ###   ########.fr       */
+/*   Updated: 2019/02/26 05:54:07 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 ** __ATTENTION__, bien renseigner le i correspondant au i du block[i].
 */
 
-int32_t	recognize_tetro(t_block block, int8_t i_block)
+static int32_t	recognize_tetro(t_block block, int8_t i_block)
 {
 	int8_t	k;
 	int8_t	l;
@@ -50,7 +50,7 @@ int32_t	recognize_tetro(t_block block, int8_t i_block)
 	return (ft_atoi(reco));
 }
 
-void	populate_ids(int *ids, t_block *blocks, int16_t nb_tetros)
+void			populate_ids(int *ids, t_block *blocks, int16_t nb_tetros)
 {
 	int i;
 
@@ -62,7 +62,7 @@ void	populate_ids(int *ids, t_block *blocks, int16_t nb_tetros)
 	}
 }
 
-t_x_y	find_tetro(t_map map, char id, int bef_char)
+t_x_y			find_tetro(t_map map, char id, int bef_char)
 {
 	t_x_y x_y;
 
@@ -85,7 +85,7 @@ t_x_y	find_tetro(t_map map, char id, int bef_char)
 	return (x_y);
 }
 
-int		try_tetro(t_block block, t_map map)
+int				try_tetro(t_block block, t_map map)
 {
 	int8_t		mino_placed;
 	t_x_y		swap;
