@@ -51,7 +51,7 @@ t_coords	find_next_mino(t_block block, t_coords coords)
 		coords.y++;
 		coords.x = 0;
 	}
-	while (coords.x < 3 && block.content[coords.y][coords.x] == '.')
+	while (coords.y < 3 && block.content[coords.y][coords.x] == '.')
 	{
 		coords.x++;
 		if (coords.y < 3 && block.content[coords.y][coords.x] == 0)
@@ -71,8 +71,6 @@ int		can_place_mino(t_map map)
 		return (1);
 	return (0);
 }
-
-
 
 int		try_tetro(t_block block, t_map map)
 {
@@ -143,38 +141,39 @@ void	write_tetro(t_block block, t_map *map)
 	sanitize_map(map);
 }
 
-t_coords	find_next_empty(t_map map)
+void	find_next_empty(t_map *map)
 {
 	int8_t	x;
 	int8_t	y;
-	t_coords new_coords;
 
-	x = map.coords.x + 1;
-	y = map.coords.y;
-	if (x >= map.size)
+	x = map->coords.x + 1;
+	y = map->coords.y;
+	if (x >= map->size)
 	{
 		x = 0;
 		y++;
 	}
-	new_coords.y = y;
-	if (y >= map.size)
+	map->coords.y = y;
+	if (y >= map->size)
 		x = 16;
-	new_coords.x = x;
-	return (new_coords);
+	map->coords.x = x;
 }
 
-t_coords	find_tetro(t_map map, char id)
+t_coords	find_tetro(t_map map, char id, int bef_char)
 {
 	t_coords coords;
 
-	coords.x = 0;
+	coords.x = 0 - bef_char;
 	coords.y = 0;
 	while (coords.y < map.size)
 	{
 		while (coords.x < map.size)
 		{
 			if (map.content[coords.y][coords.x] == id)
+			{
+				coords.x -= bef_char;
 				return (coords);
+			}
 		coords.x++;
 		}
 		coords.x = 0;
@@ -200,6 +199,16 @@ void	delete_tetro(t_map *map, char id)
 	}
 }
 
+int		points_before_char(t_block block)
+{
+	int i;
+
+	i = 0;
+	while (block.content[0][i] == '.')
+		i++;
+	return (i);
+}
+
 int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 {
 	int8_t tetros_placed;
@@ -207,8 +216,8 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 	tetros_placed = 0;
 	while (tetros_placed < nb_tetros)
 	{
-		map->coords = find_next_empty(*map);
-		if (map->coords.y < map->size && try_tetro(blocks[tetros_placed], *map))
+		find_next_empty(map);
+		if (try_tetro(blocks[tetros_placed], *map))
 		{
 			write_tetro(blocks[tetros_placed++], map);
 			map->coords.x = -1;
@@ -219,41 +228,17 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 			if (map->coords.x >= map->size && map->coords.y >= map->size)
 			{
 				tetros_placed--;
-				if (tetros_placed <= 0)
+				if (tetros_placed < 0)
 					return (0);
-				map->coords = find_tetro(*map, 'A' + tetros_placed);
+				if (recognize_block(blocks[tetros_placed], tetros_placed) == recognize_block(blocks[tetros_placed + 1], tetros_placed + 1))
+					return (0);
+				map->coords = find_tetro(*map, 'A' + tetros_placed, points_before_char(blocks[tetros_placed]));
 				delete_tetro(map, 'A' + tetros_placed);
 			}
 		}
 	}
 	return (1);
 }
-
-/*int		solver_recurse(t_map *map, t_block *blocks, int16_t nb_tetros, int8_t tetros_placed)
-{
-	map->coords = find_next_empty(*map);
-	if (map->coords.y < map->size && try_tetro(blocks[tetros_placed], *map))
-	{
-		write_tetro(blocks[tetros_placed], map);
-		tetros_placed++;
-		map->coords.x = -1;
-		map->coords.y = 0;
-		if (nb_tetros - tetros_placed == 0)
-			return (1);
-	}
-	else
-	{
-		if (map->coords.x >= map->size && map->coords.y >= map->size)
-		{
-			if (tetros_placed == 0)
-				return (0);
-			tetros_placed--;
-			map->coords = find_tetro(*map, 'A' + tetros_placed);
-			delete_tetro(map, 'A' + tetros_placed);
-		}
-	}
-	return (solver_recurse(map, blocks, nb_tetros, tetros_placed));
-}*/
 
 int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros)
 {
@@ -262,10 +247,6 @@ int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros)
 	map->coords.y = 0;
 	if (solver_iter(map, blocks, nb_tetros))
 		return (1);
-//	map->coords.x = -1;
-//	map->coords.y = 0;
-//	if (solver_recurse(map, blocks, nb_tetros, 0))
-//		return (1);
 	return (0);
 }
 
@@ -278,8 +259,6 @@ void	solver(int16_t nb_tetros, t_block *blocks)
 	map.size = ft_sqrt(nb_tetros * 4);
 	while (is_solved(&map, blocks, nb_tetros) != 1)
 		map.size++;
-	// printf("%c\n", map.content[1][2]);
-	// printf("mapsize = %d\n", map.size);
 	print_map(map);
 	exit(EXIT_SUCCESS);
 }

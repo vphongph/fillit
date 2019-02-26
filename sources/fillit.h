@@ -77,6 +77,7 @@ typedef struct	s_map
 	char		content[16][16];
 }				t_map;
 
+int32_t			recognize_block(t_block block, int8_t i_block);
 int8_t			check_block(int16_t ret, t_block *block);
 int16_t			check_main_read(int ac, char **av, t_block *block);
 void			cut_block(t_block *block);
