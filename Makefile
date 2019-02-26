@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/26 05:25:32 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/26 05:29:43 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ ifeq ($(DEBUG), yes)
 endif
 
 
-$(NAME)			:	$(OBJS) $(LIBS)
+$(NAME)			:	$(OBJS)
 ifeq ($(firstword $(MAKECMDGOALS)), re)
 				@make re -C $(LIB_PATH)
 else
