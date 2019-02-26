@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "fillit.h"
+#include <stdio.h>
 
 int8_t	ft_sqrt(int8_t area_mini)
 {
@@ -22,7 +23,23 @@ int8_t	ft_sqrt(int8_t area_mini)
 	return (i);
 }
 
-int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
+void	find_start(t_block *blocks, int8_t i, t_map *map, int *ids)
+{
+	int8_t j;
+
+	j = i - 1;
+	while (j >= 0 && ids[j] != ids[i])
+		j--;
+	if (j == -1)
+	{
+		map->x_y.x = -1;
+		map->x_y.y = 0;
+	}
+	else
+		map->x_y = find_tetro(*map, 'A' + j, skip_empty(blocks[j]));
+}
+
+int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros, int *ids)
 {
 	int8_t i;
 
@@ -33,15 +50,13 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 		if (try_tetro(blocks[i], *map))
 		{
 			write_tetro(blocks[i++], map);
-			map->x_y.x = -1;
-			map->x_y.y = 0;
+			find_start(blocks, i, map, ids);
 		}
 		else
 		{
-			if (map->x_y.x >= map->size && map->x_y.y >= map->size)
+			if (map->x_y.x + skip_empty(blocks[i]) >= map->size && map->x_y.y >= map->size)
 			{
-				if (--i < 0 || recognize_tetro(blocks[i], i)
-					== recognize_tetro(blocks[i + 1], i + 1))
+				if (--i < 0)
 					return (0);
 				map->x_y = find_tetro(*map, 'A' + i, skip_empty(blocks[i]));
 				delete_tetro(map, 'A' + i);
@@ -51,12 +66,12 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 	return (1);
 }
 
-int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros)
+int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros, int *ids)
 {
 	ft_bzero_v2(map->content, 16 * 16);
 	map->x_y.x = -1;
 	map->x_y.y = 0;
-	if (solver_iter(map, blocks, nb_tetros))
+	if (solver_iter(map, blocks, nb_tetros, ids))
 		return (1);
 	return (0);
 }
@@ -65,10 +80,12 @@ void	solver(int16_t nb_tetros, t_block *blocks)
 {
 	int		i;
 	t_map	map;
+	int 	ids[26];
 
 	i = 0;
 	map.size = ft_sqrt(nb_tetros * 4);
-	while (is_solved(&map, blocks, nb_tetros) != 1)
+	populate_ids(ids, blocks, nb_tetros);
+	while (is_solved(&map, blocks, nb_tetros, ids) != 1)
 		map.size++;
 	print_map(map);
 	exit(EXIT_SUCCESS);

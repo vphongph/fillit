@@ -50,13 +50,6 @@ typedef struct	s_block{
 	char	sep;
 }				t_block;
 
-typedef struct	s_map_victor{
-
-	int8_t	nb_block;
-	int8_t	map_size;
-	char	content[16][16];
-}				t_map_victor;
-
 typedef struct	s_x_y
 {
 	int	x;
@@ -86,5 +79,6 @@ void			delete_tetro(t_map *map, char id);
 void			print_map(t_map map);
 t_x_y			find_next_mino(t_block block, t_x_y x_y);
 int				can_place_mino(t_map map);
+void			populate_ids(int *ids, t_block *blocks, int16_t nb_tetros);
 
 #endif

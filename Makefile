@@ -36,7 +36,10 @@ endif
 SRC_NAMES	=	fillit.c		\
 				checking.c		\
 				cutting.c		\
-				solver.c
+				solver.c		\
+				minos_ops.c		\
+				tetros_ops.c	\
+				map_ops.c
 
 SRC_PATH	=	sources/
 

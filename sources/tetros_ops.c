@@ -50,11 +50,23 @@ int32_t	recognize_tetro(t_block block, int8_t i_block)
 	return (ft_atoi(reco));
 }
 
+void	populate_ids(int *ids, t_block *blocks, int16_t nb_tetros)
+{
+	int i;
+
+	i = 0;
+	while (i < nb_tetros)
+	{
+		ids[i] = recognize_tetro(blocks[i], i);
+		i++;
+	}
+}
+
 t_x_y	find_tetro(t_map map, char id, int bef_char)
 {
 	t_x_y x_y;
 
-	x_y.x = 0 - bef_char;
+	x_y.x = 0;
 	x_y.y = 0;
 	while (x_y.y < map.size)
 	{
