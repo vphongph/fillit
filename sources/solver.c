@@ -40,9 +40,7 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros)
 		{
 			if (map->x_y.x >= map->size && map->x_y.y >= map->size)
 			{
-				i--;
-				if (i < 0
-					|| recognize_tetro(blocks[i], i)
+				if (--i < 0 || recognize_tetro(blocks[i], i)
 					== recognize_tetro(blocks[i + 1], i + 1))
 					return (0);
 				map->x_y = find_tetro(*map, 'A' + i, skip_empty(blocks[i]));
@@ -65,8 +63,8 @@ int		is_solved(t_map *map, t_block *blocks, int16_t nb_tetros)
 
 void	solver(int16_t nb_tetros, t_block *blocks)
 {
-	int i;
-	t_map map;
+	int		i;
+	t_map	map;
 
 	i = 0;
 	map.size = ft_sqrt(nb_tetros * 4);
@@ -75,5 +73,3 @@ void	solver(int16_t nb_tetros, t_block *blocks)
 	print_map(map);
 	exit(EXIT_SUCCESS);
 }
-
-
