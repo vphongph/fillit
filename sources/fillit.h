@@ -64,16 +64,16 @@ typedef struct	s_map_victor{
 }				t_map_victor;
 
 
-typedef struct	s_coords
+typedef struct	s_x_y
 {
 	int	x;
 	int	y;
-}				t_coords;
+}				t_x_y;
 
 typedef struct	s_map
 {
 	int			size;
-	t_coords	coords;
+	t_x_y	x_y;
 	char		content[16][16];
 }				t_map;
 
@@ -83,5 +83,15 @@ int16_t			check_main_read(int ac, char **av, t_block *block);
 void			cut_block(t_block *block);
 int8_t			ft_sqrt(int8_t area_mini);
 void			solver(int16_t nb_tetros, t_block *blocks);
+void			find_next_empty(t_map *map);
+int				try_tetro(t_block block, t_map map);
+void			write_tetro(t_block block, t_map *map);
+int32_t			recognize_tetro(t_block block, int8_t i_block);
+t_x_y			find_tetro(t_map map, char id, int bef_char);
+int				skip_empty(t_block block);
+void			delete_tetro(t_map *map, char id);
+void			print_map(t_map map);
+t_x_y			find_next_mino(t_block block, t_x_y x_y);
+int				can_place_mino(t_map map);
 
 #endif
