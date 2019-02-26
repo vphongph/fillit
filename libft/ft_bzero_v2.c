@@ -6,13 +6,12 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 18:34:10 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/20 18:22:02 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/26 18:09:26 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
-#include <stdio.h>
 
 /*
 ** Possible aussi avec tableau[0] pour init
