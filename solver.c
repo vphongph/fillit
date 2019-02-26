@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 19:53:37 by mtorsell          #+#    #+#             */
-/*   Updated: 2019/02/25 20:14:06 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/26 05:19:09 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int		solver_iter(t_map *map, t_block *blocks, int16_t nb_tetros, int *ids)
 		}
 		else
 		{
-			if (map->x_y.x + skip_empty(blocks[i]) >= map->size && map->x_y.y >= map->size)
+			if (map->x_y.x + skip_empty(blocks[i]) >= map->size
+				&& map->x_y.y >= map->size)
 			{
 				if (--i < 0)
 					return (0);
@@ -80,7 +81,7 @@ void	solver(int16_t nb_tetros, t_block *blocks)
 {
 	int		i;
 	t_map	map;
-	int 	ids[26];
+	int		ids[26];
 
 	i = 0;
 	map.size = ft_sqrt(nb_tetros * 4);

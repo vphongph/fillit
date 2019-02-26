@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/25 15:32:08 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/26 05:25:32 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,9 +41,7 @@ SRC_NAMES	=	fillit.c		\
 				tetros_ops.c	\
 				map_ops.c
 
-SRC_PATH	=	sources/
-
-SRCS		=	$(addprefix $(SRC_PATH), $(SRC_NAMES))
+SRCS		=	$(SRC_NAMES)
 
 OBJ_NAMES	=	$(SRC_NAMES:.c=.o)
 
@@ -69,12 +67,25 @@ RUN_ARGS	=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 .PHONY			:	all makeinclude clean fclean re run
 
 
-all				:	makeinclude	$(NAME)
+all				:	$(NAME)
 ifeq ($(DEBUG), yes)
 				@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"\
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
-					@printf $(blue)"\
+
+
+$(NAME)			:	$(OBJS) $(LIBS)
+ifeq ($(firstword $(MAKECMDGOALS)), re)
+				@make re -C $(LIB_PATH)
+else
+				@make -C $(LIB_PATH)
+endif
+				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
+				@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
+ifneq ($(DEBUG), yes)
+				@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
+endif
+				@printf $(blue)"\
 				      ____________ \n\
 				     /\  ________ \ \n\
 				    /  \ \______/\ \ "$(yellow)"FILLIT"$(blue)"\n\
@@ -113,20 +124,6 @@ endif
 				    \  / /______\/ / \n\
 				     \/___________/ \n"$(reset)
 
-
-$(NAME)			:	$(LIBS) $(OBJS)
-#ifeq ($(firstword $(MAKECMDGOALS)), re)
-#d				@make re -C $(LIB_PATH)
-#else
-#				@make -C $(LIB_PATH)
-#endif
-				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
-				@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
-ifneq ($(DEBUG), yes)
-				@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
-endif
-
-
 makeinclude		:
 ifeq ($(firstword $(MAKECMDGOALS)), re)
 				@make re -C $(LIB_PATH)
@@ -135,7 +132,7 @@ else
 endif
 
 
-$(OBJ_PATH)%.o	:	$(SRC_PATH)%.c $(HDRS)
+$(OBJ_PATH)%.o	:	%.c $(HDRS)
 ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@echo $(green)" NEW" $?
 endif
@@ -176,16 +173,3 @@ endif
 
 run				:	all
 				./$(NAME) $(RUN_ARGS)
-
-# A creuser avec la boucle ci dessous + foreach
-#define CLEAN_LIB__TEMPLATE
-#	@make -C $(1) $@
-#endef
-
-#Boucle dans le makefile, mais il faut un tableau, à creuser
-#@	i=1 ; while [[ $$i -le 1 ]] ; do	\
-#	make re -C libft/;					\
-#	i+=+1;								\
-#	done
-
-

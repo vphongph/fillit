@@ -6,7 +6,7 @@
 /*   By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 17:24:21 by vphongph          #+#    #+#             */
-/*   Updated: 2019/02/25 18:11:24 by vphongph         ###   ########.fr       */
+/*   Updated: 2019/02/26 05:21:18 by vphongph         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define MASK_1STCOL	0xff00000000ff
 # define OK		0
 # define NOOK	1
-# include "../libft/libft.h"
+# include "libft/libft.h"
 # include <stdlib.h>
 
 enum	e_cardinal{
