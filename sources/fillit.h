@@ -37,13 +37,7 @@
 # include "../libft/libft.h"
 # include <stdlib.h>
 
-enum e_bool
-{
-	t_true = 1,
-	t_false = 0
-};
-
-enum e_cardinal{
+enum	e_cardinal{
 	t_west = '1',
 	t_north = '2',
 	t_east = '3',
@@ -63,7 +57,6 @@ typedef struct	s_map_victor{
 	char	content[16][16];
 }				t_map_victor;
 
-
 typedef struct	s_x_y
 {
 	int	x;
@@ -73,7 +66,7 @@ typedef struct	s_x_y
 typedef struct	s_map
 {
 	int			size;
-	t_x_y	x_y;
+	t_x_y		x_y;
 	char		content[16][16];
 }				t_map;
 
