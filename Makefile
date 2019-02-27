@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/25 15:32:08 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/27 23:02:54 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,15 +66,32 @@ LIBS		=	$(LIB_PATH)$(LIB_NAMES)
 RUN_ARGS	=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 
-.PHONY			:	all makeinclude clean fclean re run
+.PHONY			:	all makeinclude clean fclean re reinclude run
 
 
-all				:	makeinclude	$(NAME)
+all				:	makeinclude $(NAME)
 ifeq ($(DEBUG), yes)
 				@echo $(red)$(blink)" DEBUG"$(reset) $(yellow)"MODE $(NAME)"\
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
-					@printf $(blue)"\
+
+makeinclude		:
+ifeq ($(firstword $(MAKECMDGOALS)), re)
+				@make re -C $(LIB_PATH)
+else
+				@make -C $(LIB_PATH)
+endif
+
+$(NAME)			:	$(LIBS) $(OBJS)
+#ifneq ($(firstword $(MAKECMDGOALS)), re)
+#				@make -C $(LIB_PATH)
+#endif
+				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
+				@echo $(green_dark)" Compiling" $(grey)"libs and objects" $(green)"-> $@"$(reset)
+ifneq ($(DEBUG), yes)
+				@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
+endif
+				@printf $(blue)"\
 				      ____________ \n\
 				     /\  ________ \ \n\
 				    /  \ \______/\ \ "$(yellow)"FILLIT"$(blue)"\n\
@@ -87,55 +104,34 @@ endif
 				  \ \ \/ / /"$(red_dark)$(blink)"\ \ \/ / /"$(reset)$(blue)"\ \ \/ / /\ \ \ \n\
 				   \ \/ / /"$(red_dark)$(blink)"__\_\/ / /__"$(reset)$(blue)"\ \ \/_/__\_\ \ \n\
 				    \  /_/"$(red_dark)$(blink)"______\/_/____"$(reset)$(blue)"\ \___________\ \n\
-				    /  \ "
-				    @printf \\
-				    @printf $(red_dark)$(blink)"______/\ \____"$(reset)$(blue)"/ / ________  / \n\
-				   / /\ \ "
-				   	@printf \\
+				    /  \ " 2>/dev/null || true
+				@printf "\\" 2>/dev/null || true
+				@printf $(red_dark)$(blink)"______/\ \____"$(reset)$(blue)"/ / ________  / \n\
+				   / /\ \ " 2>/dev/null || true
+				@printf "\\" 2>/dev/null || true
 				   	@printf $(red_dark)$(blink)"  / /\ \ \  "$(reset)$(blue)"/ / /\ \  / / / \n\
-				  / / /\ \ "
-				  	@printf \\
-				  	@printf $(red_dark)$(blink)"/ / /\ \ "
-				  	@printf \\
-				  	@printf $(reset)$(blue)"/ / /\ \ \/ / / \n\
-				 / / /__\ \ "
-				 	@printf \\
-				 	@printf $(red_dark)$(blink)"/"$(reset)$(blue)"_"$(red_dark)$(blink)"/"$(reset)$(blue)"__"
-				 	@printf $(red_dark)$(blink)\\
-				 	@printf $(reset)$(blue)"_"
-				 	@printf $(red_dark)$(blink)\\
-				 	@printf $(reset)$(blue)"/ / /__\_\/ / / \n\
+				  / / /\ \ " 2>/dev/null || true
+				@printf "\\" 2>/dev/null || true
+				@printf $(red_dark)$(blink)"/ / /\ \ " 2>/dev/null || true
+				@printf "\\" 2>/dev/null || true
+				@printf $(reset)$(blue)"/ / /\ \ \/ / / \n\
+				 / / /__\ \ " 2>/dev/null || true
+				@printf "\\" 2>/dev/null || true
+				@printf $(red_dark)$(blink)"/"$(reset)$(blue)"_"$(red_dark)$(blink)"/"$(reset)$(blue)"__" 2>/dev/null || true
+				@printf $(red_dark)$(blink)"\\" 2>/dev/null || true
+				@printf $(reset)$(blue)"_" 2>/dev/null || true
+				@printf $(red_dark)$(blink)"\\" 2>/dev/null || true
+				@printf $(reset)$(blue)"/ / /__\_\/ / / \n\
 				/ /_/____\ \_________\/ /______\/ / \n\
 				\ \ \____/ / ________  __________/ \n\
 				 \ \ \  / / /\ \  / / / \n\
 				  \ \ \/ / /\ \ \/ / / \n\
 				   \ \/ / /__\_\/ / / \n\
 				    \  / /______\/ / \n\
-				     \/___________/ \n"$(reset)
+				     \/___________/ \n"$(reset) 2>/dev/null || true
 
 
-$(NAME)			:	$(LIBS) $(OBJS)
-#ifeq ($(firstword $(MAKECMDGOALS)), re)
-#d				@make re -C $(LIB_PATH)
-#else
-#				@make -C $(LIB_PATH)
-#endif
-				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
-				@echo $(green_dark)" Compiling" $(grey)$^ $(green)"-> $@"$(reset)
-ifneq ($(DEBUG), yes)
-				@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
-endif
-
-
-makeinclude		:
-ifeq ($(firstword $(MAKECMDGOALS)), re)
-				@make re -C $(LIB_PATH)
-else
-				@make -C $(LIB_PATH)
-endif
-
-
-$(OBJ_PATH)%.o	:	$(SRC_PATH)%.c $(HDRS)
+$(OBJ_PATH)%.o	: $(SRC_PATH)%.c $(HDRS)
 ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@echo $(green)" NEW" $?
 endif
@@ -143,6 +139,7 @@ endif
 				@$(CC) $(CFLAGS) -c $< -o $@
 				@echo $(green_dark)"  Compiling" $(grey)$< $(green_dark)\
 				"->" $(grey)"$@"$(reset)
+
 
 clean			:
 ifneq ($(firstword $(MAKECMDGOALS)), fclean)
@@ -164,6 +161,9 @@ endif
 
 
 re				:	fclean all
+
+
+#reinclude		:
 #				@make re -C $(LIB_PATH)
 
 
