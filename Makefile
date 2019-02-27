@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/02/27 23:02:54 by vphongph         ###   ########.fr        #
+#    Updated: 2019/02/27 23:09:47 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,12 +75,14 @@ ifeq ($(DEBUG), yes)
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
 
+
 makeinclude		:
 ifeq ($(firstword $(MAKECMDGOALS)), re)
 				@make re -C $(LIB_PATH)
 else
 				@make -C $(LIB_PATH)
 endif
+
 
 $(NAME)			:	$(LIBS) $(OBJS)
 #ifneq ($(firstword $(MAKECMDGOALS)), re)
@@ -177,6 +179,7 @@ endif
 run				:	all
 				./$(NAME) $(RUN_ARGS)
 
+
 # A creuser avec la boucle ci dessous + foreach
 #define CLEAN_LIB__TEMPLATE
 #	@make -C $(1) $@
@@ -187,5 +190,4 @@ run				:	all
 #	make re -C libft/;					\
 #	i+=+1;								\
 #	done
-
 
