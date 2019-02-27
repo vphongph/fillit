@@ -50,7 +50,7 @@ OBJS		=	$(SRCS:.c=.o)
 HDRS		=	libft.h
 
 
-.PHONY	:	alol clean fclean re
+.PHONY	:	all clean fclean re
 
 
 all	:	$(NAME)
