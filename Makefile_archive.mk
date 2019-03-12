@@ -6,9 +6,13 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/03/13 00:56:14 by vphongph         ###   ########.fr        #
+#    Updated: 2019/03/12 19:10:20 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+# DEPRECATED
+# MAKEFILE ARCHIVE, WITH OLD AND NEW (CURRENT) RULES
+# Last edit 12/03/2019
 
 #___________________________________COLORS_____________________________________#
 
@@ -27,14 +31,14 @@ reset		:= 	"\033[0m"
 
 #__________________________________CONSTANTS___________________________________#
 
-NAME			:=	fillit
+NAME		:=	fillit
 
-CC				:=	gcc
+CC			:=	gcc
 
 ifeq ($(DEBUG), yes)
-	CFLAGS		:=	-Wall -Wextra -Werror -g3 -fsanitize=address
+	CFLAGS	:=	-Wall -Wextra -Werror -g3 -fsanitize=address
 else
-	CFLAGS		:=	-Wall -Wextra -Werror
+	CFLAGS	:=	-Wall -Wextra -Werror
 endif
 
 SRC_NAMES		:=	fillit.c		\
@@ -61,34 +65,49 @@ HDR_PATH		:=	$(SRC_PATH)
 
 HDRS			:=	$(HDR_PATH)$(HDR_NAMES)
 
-LIBS			:=	libft/libft.a	\
-					libft_dupli/libft_dupli.a
+LIB_NAMES		:=	libft.a
+
+LIB_PATH		:= 	libft/
+
+CLIB 			:= libft/libft.a libft_dupli/libft_dupli.a
+
+LIBS			:=	$(LIB_PATH)$(LIB_NAMES)
 
 RUN_ARGS		:=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
-RULE_SENT		:= 	$(firstword $(MAKECMDGOALS))
-
 .DEFAULT_GOAL	:=  all
 
-#_________________________________VARIABLES____________________________________#
+#__________________________________VARIABLES___________________________________#
 
+ifeq ($(firstword $(MAKECMDGOALS)), )
 libraries		=	$(shell make -q -s -C $(1) || echo 'FORCE')
+else
+libraries		=	$(shell echo 'FORCE')
+endif
 
-#________________________________LIBS_RULES____________________________________#
+#____________________________________RULES_____________________________________#
 
 .SECONDEXPANSION:
 
-ifneq ($(LIBS), )
-ifneq ($(RULE_SENT), re)
-$(LIBS)			:	$$(strip $$(call libraries,$ $$(@D)))
+ifneq ($(CLIB), )
+$(CLIB)			:	$$(strip $$(call libraries,$ $$(@D)))
+ifeq ($(firstword $(MAKECMDGOALS)), re)
+		@make re -C $(@D)
+else
+ifeq ($(firstword $(MAKECMDGOALS)), clean)
+		@make clean -C $(@D)
+else
+ifeq ($(firstword $(MAKECMDGOALS)), fclean)
+		@make fclean -C $(@D)
+else
 		@make -C $(@D)
 endif
 endif
+endif
+endif
 
-#__________________________________RULES_______________________________________#
 
-
-.PHONY			:	all clean fclean re relibs FORCE run
+.PHONY			:	all clean fclean re relibs run
 
 
 all				:	$(NAME)
@@ -97,8 +116,21 @@ ifeq ($(DEBUG), yes)
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
 
-$(NAME)			:	$(LIBS) $(OBJS)
-				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
+
+
+#makeinclude		:
+#ifeq ($(firstword $(MAKECMDGOALS)), re)
+#				@make re -C $(LIB_PATH)
+#else
+#				@make -C $(LIB_PATH)
+#endif
+
+
+$(NAME)			:	$(CLIB) $(OBJS)
+#ifeq ($(firstword $(MAKECMDGOALS)), re)
+#				@make re -C $(LIB_PATH)
+# endif
+				@$(CC) $(CFLAGS) $(CLIB) $(OBJS) -o $(NAME)
 				@echo $(green_dark)" Compiling" $(grey)"libs and objects" $(green)"-> $@"$(reset)
 ifneq ($(DEBUG), yes)
 				@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
@@ -143,8 +175,8 @@ endif
 				     \/___________/ \n"$(reset) 2>/dev/null || true
 
 
-$(OBJ_PATH)%.o	:	$(SRC_PATH)%.c $(HDRS)
-ifneq ($(RULE_SENT), re)
+$(OBJ_PATH)%.o	: $(SRC_PATH)%.c $(HDRS)
+ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@echo $(green)" NEW" $?
 endif
 				@mkdir -p $(OBJ_PATH)
@@ -153,34 +185,32 @@ endif
 				"->" $(grey)"$@"$(reset)
 
 
-clean			:
-ifeq ($(RULE_SENT), clean)
-				@$(foreach varToGen, $(LIBS), make clean -C $(dir $(varToGen));)
+clean			: $(CLIB)
+ifneq ($(firstword $(MAKECMDGOALS)), fclean)
+ifneq ($(firstword $(MAKECMDGOALS)), re)
+				@make $@ -C $(LIB_PATH)
+endif
 endif
 				@/bin/rm -f $(OBJS)
 				@rmdir $(OBJ_PATH) 2>/dev/null || true
 				@echo $(red_dark)" Removing objects from" $(grey)$(NAME)$(reset)
 
 
-fclean			:	clean
-ifeq ($(RULE_SENT), fclean)
-				@$(foreach varToGen, $(LIBS), make fclean -C $(dir $(varToGen));)
-endif
+fclean			:	$(CLIB) clean
 				@/bin/rm -f $(NAME)
 	 			@echo $(red_dark)" Removing binary" $(grey)$(NAME)$(reset)
 
 
-re				:	relibs fclean all
+# re				:	fclean relibs all
 
+re				:	fclean all
 
-relibs			:
-				@$(foreach varToGen, $(LIBS), make re -C $(dir $(varToGen));)
-
+# relibs			:
+#				@make re -C $(LIB_PATH)
 
 FORCE			:
 
-
-ifeq ($(RULE_SENT), run)
+ifeq ($(firstword $(MAKECMDGOALS)), run)
 ifndef VERBOSE
 .SILENT			:
 endif
@@ -189,3 +219,15 @@ endif
 
 run				:	all
 				./$(NAME) $(RUN_ARGS)
+
+
+# A creuser avec la boucle ci dessous + foreach
+#define CLEAN_LIB__TEMPLATE
+#	@make -C $(1) $@
+#endef
+
+#Boucle dans le makefile, mais il faut un tableau, à creuser
+#@	i=1 ; while [[ $$i -le 1 ]] ; do	\
+#	make re -C libft/;					\
+#	i+=+1;								\
+#	done

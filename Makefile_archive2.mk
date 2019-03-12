@@ -6,9 +6,15 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/03/13 00:56:14 by vphongph         ###   ########.fr        #
+#    Updated: 2019/03/12 23:32:20 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+# DEPRECATED
+# MAKEFILE ARCHIVE, WITH OLD AND NEW (CURRENT) RULES
+# EVOLUTION FROM TRICKS WITH CLIB AND OTHERS MAKE TO MAKE WITH FOREACH
+# THANKS TO HMARTZOL
+# Last edit 13/03/2019
 
 #___________________________________COLORS_____________________________________#
 
@@ -61,34 +67,52 @@ HDR_PATH		:=	$(SRC_PATH)
 
 HDRS			:=	$(HDR_PATH)$(HDR_NAMES)
 
-LIBS			:=	libft/libft.a	\
+LIB_NAMES		:=	libft.a
+
+LIB_PATH		:= 	libft/
+
+CLIB 			:=	libft/libft.a	\
 					libft_dupli/libft_dupli.a
 
-RUN_ARGS		:=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+LIBS			:=	$(LIB_PATH)$(LIB_NAMES)
 
-RULE_SENT		:= 	$(firstword $(MAKECMDGOALS))
+RUN_ARGS		:=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 .DEFAULT_GOAL	:=  all
 
 #_________________________________VARIABLES____________________________________#
 
+ifeq ($(firstword $(MAKECMDGOALS)), )
 libraries		=	$(shell make -q -s -C $(1) || echo 'FORCE')
+else
+ifneq ($(firstword $(MAKECMDGOALS)), run)
+libraries		=	$(shell echo 'FORCE')
+endif
+endif
 
 #________________________________LIBS_RULES____________________________________#
 
 .SECONDEXPANSION:
 
-ifneq ($(LIBS), )
-ifneq ($(RULE_SENT), re)
-$(LIBS)			:	$$(strip $$(call libraries,$ $$(@D)))
+ifneq ($(CLIB), )
+$(CLIB)			:	$$(strip $$(call libraries,$ $$(@D)))
+ifeq ($(firstword $(MAKECMDGOALS)), clean)
+		@make clean -C $(@D)
+else
+ifeq ($(firstword $(MAKECMDGOALS)), fclean)
+		@make fclean -C $(@D)
+else
+ifeq ($(firstword $(MAKECMDGOALS)), re)
+		@make re -C $(@D)
+else
 		@make -C $(@D)
 endif
 endif
+endif
+endif
 
-#__________________________________RULES_______________________________________#
 
-
-.PHONY			:	all clean fclean re relibs FORCE run
+.PHONY			:	all clean fclean re FORCE run
 
 
 all				:	$(NAME)
@@ -97,8 +121,8 @@ ifeq ($(DEBUG), yes)
 				$(grey)"don't forget debug mode for libs"$(reset)
 endif
 
-$(NAME)			:	$(LIBS) $(OBJS)
-				@$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
+$(NAME)			:	$(CLIB) $(OBJS)
+				@$(CC) $(CFLAGS) $(CLIB) $(OBJS) -o $(NAME)
 				@echo $(green_dark)" Compiling" $(grey)"libs and objects" $(green)"-> $@"$(reset)
 ifneq ($(DEBUG), yes)
 				@echo $(yellow)" NORMAL MODE $(NAME)"$(reset)
@@ -143,8 +167,8 @@ endif
 				     \/___________/ \n"$(reset) 2>/dev/null || true
 
 
-$(OBJ_PATH)%.o	:	$(SRC_PATH)%.c $(HDRS)
-ifneq ($(RULE_SENT), re)
+$(OBJ_PATH)%.o	: $(SRC_PATH)%.c $(HDRS)
+ifneq ($(firstword $(MAKECMDGOALS)), re)
 				@echo $(green)" NEW" $?
 endif
 				@mkdir -p $(OBJ_PATH)
@@ -153,34 +177,25 @@ endif
 				"->" $(grey)"$@"$(reset)
 
 
-clean			:
-ifeq ($(RULE_SENT), clean)
-				@$(foreach varToGen, $(LIBS), make clean -C $(dir $(varToGen));)
-endif
+clean			:	$(CLIB)
 				@/bin/rm -f $(OBJS)
 				@rmdir $(OBJ_PATH) 2>/dev/null || true
 				@echo $(red_dark)" Removing objects from" $(grey)$(NAME)$(reset)
 
 
-fclean			:	clean
-ifeq ($(RULE_SENT), fclean)
-				@$(foreach varToGen, $(LIBS), make fclean -C $(dir $(varToGen));)
-endif
+fclean			:	$(CLIB) clean
+#				$(foreach varToGen, $(CLIB), make fclean -C $(dir $(varToGen));)
 				@/bin/rm -f $(NAME)
 	 			@echo $(red_dark)" Removing binary" $(grey)$(NAME)$(reset)
 
 
-re				:	relibs fclean all
-
-
-relibs			:
-				@$(foreach varToGen, $(LIBS), make re -C $(dir $(varToGen));)
+re				:	fclean all
 
 
 FORCE			:
 
 
-ifeq ($(RULE_SENT), run)
+ifeq ($(firstword $(MAKECMDGOALS)), run)
 ifndef VERBOSE
 .SILENT			:
 endif
