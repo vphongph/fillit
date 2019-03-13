@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/03/13 00:56:14 by vphongph         ###   ########.fr        #
+#    Updated: 2019/03/13 01:14:19 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,8 @@ HDR_PATH		:=	$(SRC_PATH)
 HDRS			:=	$(HDR_PATH)$(HDR_NAMES)
 
 LIBS			:=	libft/libft.a	\
-					libft_dupli/libft_dupli.a
+					libft_dupli/libft_dupli.a	\
+					libft_dupli2/libft_dupli2.a
 
 RUN_ARGS		:=	$(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
