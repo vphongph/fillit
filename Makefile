@@ -6,7 +6,7 @@
 #    By: vphongph <vphongph@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/24 21:12:59 by vphongph          #+#    #+#              #
-#    Updated: 2019/03/13 01:14:19 by vphongph         ###   ########.fr        #
+#    Updated: 2019/03/13 01:50:26 by vphongph         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ CC				:=	gcc
 ifeq ($(DEBUG), yes)
 	CFLAGS		:=	-Wall -Wextra -Werror -g3 -fsanitize=address
 else
-	CFLAGS		:=	-Wall -Wextra -Werror
+	CFLAGS		:=	-Wall -Wextra -Werror -MMD
 endif
 
 SRC_NAMES		:=	fillit.c		\
@@ -55,11 +55,11 @@ OBJ_PATH		:=	objects/
 
 OBJS			:=	$(addprefix $(OBJ_PATH), $(OBJ_NAMES))
 
-HDR_NAMES		:=	$(addsuffix .h, $(NAME))
+DEP_NAMES		:=	$(SRC_NAMES:.c=.d)
 
-HDR_PATH		:=	$(SRC_PATH)
+DEP_PATH		:=	$(OBJ_PATH)
 
-HDRS			:=	$(HDR_PATH)$(HDR_NAMES)
+DEPS			:=	$(addprefix $(DEP_PATH), $(DEP_NAMES))
 
 LIBS			:=	libft/libft.a	\
 					libft_dupli/libft_dupli.a	\
@@ -144,7 +144,7 @@ endif
 				     \/___________/ \n"$(reset) 2>/dev/null || true
 
 
-$(OBJ_PATH)%.o	:	$(SRC_PATH)%.c $(HDRS)
+$(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
 ifneq ($(RULE_SENT), re)
 				@echo $(green)" NEW" $?
 endif
@@ -190,3 +190,5 @@ endif
 
 run				:	all
 				./$(NAME) $(RUN_ARGS)
+
+-include $(DEPS)
